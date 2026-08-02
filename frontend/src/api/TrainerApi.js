@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/trainers";
-
+const API_URL="https://gym-management-system-rn77.onrender.com/trainers";
 export const getTrainers = () => axios.get(API_URL);
 
 export const addTrainer = (trainer) =>

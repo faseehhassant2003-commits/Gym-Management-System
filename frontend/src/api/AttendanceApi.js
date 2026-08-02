@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const API_URL="http://localhost:8080/attendance";
-
+const API_URL="https://gym-management-system-rn77.onrender.com/attendance";
 export const getAttendance=()=>
  axios.get(API_URL);
 
