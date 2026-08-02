@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = {
-        "http://localhost:5173", "https://gym-management-frontend-apeh.onrender.com",
-        "http://localhost:5174"
-})
+
 public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;

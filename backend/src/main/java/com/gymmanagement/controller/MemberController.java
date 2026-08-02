@@ -21,7 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:5174","http://localhost:5173"})
+
 public class MemberController {
     @Autowired
     private MemberService memberService;
