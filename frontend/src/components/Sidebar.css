@@ -1,0 +1,11 @@
+.sidebar {
+    position: fixed;
+    top: 56px;          /* Navbar height */
+    left: 0;
+    width: 240px;
+    height: calc(100vh - 56px);
+    background-color: #212529;
+    color: white;
+    padding: 20px;
+    overflow-y: auto;
+}

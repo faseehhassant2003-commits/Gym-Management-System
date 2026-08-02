@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: gym-management-mysql
+    restart: always
+
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: gym_management
+
+    ports:
+      - "3307:3306"
+
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  backend:
+    build:
+      context: ./backend
+
+    container_name: gym-management-api
+
+    ports:
+      - "8080:8080"
+
+    depends_on:
+      - mysql
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/gym_management
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+
+  frontend:
+    build:
+      context: ./frontend
+
+    container_name: gym-management-react
+
+    ports:
+      - "5173:5173"
+
+    depends_on:
+      - backend
+
+volumes:
+  mysql-data:
