@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const API_URL="https://gym-management-system-rn77.onrender.com/members";
-export const getMembers = () => {
+const API_URL = `${import.meta.env.VITE_API_URL}/members`;export const getMembers = () => {
     return axios.get(API_URL);
 };
 
