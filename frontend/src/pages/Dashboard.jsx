@@ -1,5 +1,6 @@
 import { useEffect,useState } from "react";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import DashboardCard from "../components/DashboardCard";
@@ -18,8 +19,7 @@ const [summary, setSummary] = useState({
 
 useEffect(() => {
   axios
-    .get("http://localhost:8080/dashboard/summary")
-    .then((response) => {
+.get(`${API_URL}/dashboard/summary`)    .then((response) => {
       setSummary(response.data);
     })
     .catch((error) => {

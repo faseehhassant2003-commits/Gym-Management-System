@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function RecentPayments() {
 
@@ -7,7 +8,7 @@ function RecentPayments() {
 
     useEffect(() => {
         axios
-            .get("http://localhost:8080/dashboard/recent-payments")
+            .get(`${API_URL}/dashboard/recent-payments`)
             .then((response) => {
                 setPayments(response.data);
             })
