@@ -1,12 +1,15 @@
 import Layout from "../layouts/Layout";
 import { useState,useEffect } from "react";
+
 import { getMembers,addMember,updateMember,deleteMember as deleteMemberApi} from "../api/memberApi";
+import { toast } from "react-toastify";
 
 
 function Members() {
   const [showForm,setShowForm]=useState(false);
   const [memberName, setMemberName] = useState("");
 const [age, setAge] = useState("");
+const [searchTerm, setSearchTerm] = useState("");
 const [phone, setPhone] = useState("");
 const [membership, setMembership] = useState("Gold");
 const [editingId, setEditingId] = useState(null);
@@ -18,27 +21,32 @@ const loadMembers = async () => {
     try {
         const response = await getMembers();
 
-        console.log(response.data);   // <-- Add this line
+     
 
         setMembers(response.data);
     } catch (error) {
 
-    alert(error.response.data);
-
+toast.error(error.response?.data || "Failed to load members");
 }
 };
 async function saveMember(){
-if(memberName===""){
-  alert("please enter the name");
-  return;
+if(memberName.trim().length < 3){
+
+    toast.warning("Name must contain at least 3 characters");
+
+    return;
 }
-if(age===""){
-  alert("please enter the age");
-  return;
+if(age < 16 || age > 100){
+
+    toast.warning("Age must be between 16 and 100");
+
+    return;
 }
-if(phone===""){
-  alert("please enter the phone");
-  return;
+if(!/^\d{10}$/.test(phone)){
+
+    toast.warning("Phone number must contain exactly 10 digits");
+
+    return;
 }
 
 
@@ -80,9 +88,9 @@ async function deleteMemberHandler(id) {
         } catch (error) {
 
     if (error.response) {
-        alert(error.response.data);
+        toast.error(error.response.data);
     } else {
-        alert("Something went wrong.");
+        toast.error("Something went wrong.");
     }
 
 }
@@ -107,6 +115,9 @@ function cancelEdit() {
     setEditingId(null);
     setShowForm(false);
 }
+const filteredMembers = members.filter((member) =>
+    member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||member.phone.includes(searchTerm) || member.membership.toLowerCase().includes(searchTerm.toLowerCase())
+);
 return (
 
 
@@ -172,7 +183,13 @@ return (
 
   </div>
 )}
-
+<input
+    type="text"
+    className="form-control mb-3"
+    placeholder="Search by name,phone or membership"
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+/>
           <table className="table table-bordered table-striped">
 
             <thead>
@@ -187,23 +204,45 @@ return (
 
             <tbody>
 
-                {members.map((member)=>(
-                      <tr key={member.id}>
-                          <td>{member.name}</td>
-                          <td>{member.age}</td>
-                          <td>{member.phone}</td>
-                          <td>{member.membership}</td>
-                          <td>
-                            <button className="btn btn-warning btn-sm me-2 " onClick={()=>editMember(member)}>Edit</button>
-                         
-                            <button className="btn btn-warning btn-sm me-2" onClick={()=>deleteMemberHandler(member.id)}>Delete</button>
-                          </td>
+{filteredMembers.length === 0 ? (
 
+    <tr>
+        <td colSpan="5" className="text-center">
+            No members found
+        </td>
+    </tr>
 
+) : (
 
-                      </tr>))}
+    filteredMembers.map((member) => (
 
-            </tbody>
+        <tr key={member.id}>
+            <td>{member.name}</td>
+            <td>{member.age}</td>
+            <td>{member.phone}</td>
+            <td>{member.membership}</td>
+            <td>
+                <button
+                    className="btn btn-warning btn-sm me-2"
+                    onClick={() => editMember(member)}
+                >
+                    Edit
+                </button>
+
+                <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => deleteMemberHandler(member.id)}
+                >
+                    Delete
+                </button>
+            </td>
+        </tr>
+
+    ))
+
+)}
+
+</tbody>
 
           </table>
 

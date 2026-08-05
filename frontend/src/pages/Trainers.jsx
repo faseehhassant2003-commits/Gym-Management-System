@@ -188,7 +188,7 @@ if(editingId===null){
                           <button className="btn btn-warning btn-sm me-2" onClick={()=>editTrainer(trainer)}>
                             Edit
                           </button>
-                          <button className="btn btn-warning btn-sm me-2" onClick={()=>handleDeleteTrainer(trainer.id)}>
+                          <button className="btn btn-danger btn-sm" onClick={()=>handleDeleteTrainer(trainer.id)}>
                             Delete
                           </button>
                         </td>

@@ -1,3 +1,5 @@
+import ProtectedRoute from "./components/ProtectedRoute";
+
 import Login from "./pages/Login";
 import Members from "./pages/Members";
 import Trainers from "./pages/Trainers";
@@ -14,13 +16,62 @@ function App() {
 <Routes>
   <Route path="/" element={<Login/>}/>
   <Route path="/register" element={<Register/>}/>
-  <Route path="/dashboard" element={<Dashboard />} />
-  <Route path="/members" element={<Members/>}/>
-      <Route path="/trainers" element={<Trainers/>}/>
-      <Route path="/attendance" element={<Attendance/>}/>
-      <Route path="/diet" element={<DietPlans/>}/>
-      <Route path="/workoutPlans" element={<WorkoutPlans />} />
-        <Route path="/payments" element={<Payments/>}/>
+ <Route
+    path="/dashboard"
+    element={
+        <ProtectedRoute>
+            <Dashboard />
+        </ProtectedRoute>
+    }
+/>
+<Route
+    path="/members"
+    element={
+        <ProtectedRoute>
+            <Members />
+        </ProtectedRoute>
+    }
+/>
+<Route
+    path="/trainers"
+    element={
+        <ProtectedRoute>
+            <Trainers />
+        </ProtectedRoute>
+    }
+/>     <Route
+    path="/attendance"
+    element={
+        <ProtectedRoute>
+            <Attendance />
+        </ProtectedRoute>
+    }
+/>
+      <Route
+    path="/diet"
+    element={
+        <ProtectedRoute>
+            <DietPlans />
+        </ProtectedRoute>
+    }
+/>
+
+      <Route
+    path="/workoutPlans"
+    element={
+        <ProtectedRoute>
+            <WorkoutPlans />
+        </ProtectedRoute>
+    }
+/>
+       <Route
+    path="/payments"
+    element={
+        <ProtectedRoute>
+            <Payments />
+        </ProtectedRoute>
+    }
+/>
  </Routes>
 </BrowserRouter>
   );

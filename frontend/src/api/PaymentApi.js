@@ -1,12 +1,10 @@
-import axios from "axios";
-
-const API_URL = `${import.meta.env.VITE_API_URL}/payments`;
+import api from "./api";
 
 export const getPayments=()=>
-    axios.get(API_URL);
+    api.get("/payments");
 export const addPayment=(payment)=>
-    axios.post(API_URL,payment);
+    api.post("/payments",payment);
 export const updatePayment=(id,payment)=>
-    axios.put(`${API_URL}/${id}`, payment);
+    api.put(`/payments/${id}`, payment);
 export const deletePayment=(id)=>
- axios.delete(`${API_URL}/${id}`);
+ api.delete(`/payments/${id}`);

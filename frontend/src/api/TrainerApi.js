@@ -1,13 +1,12 @@
-import axios from "axios";
+import api from "./api";
 
-const API_URL = `${import.meta.env.VITE_API_URL}/trainers`;
-export const getTrainers = () => axios.get(API_URL);
+export const getTrainers = () => api.get("/trainers");
 
 export const addTrainer = (trainer) =>
-    axios.post(API_URL, trainer);
+    api.post("/trainers", trainer);
 
 export const updateTrainer = (id, trainer) =>
-    axios.put(`${API_URL}/${id}`, trainer);
+    api.put(`/trainers/${id}`, trainer);
 
 export const deleteTrainer = (id) =>
-    axios.delete(`${API_URL}/${id}`);
+    api.delete(`/trainers/${id}`);
