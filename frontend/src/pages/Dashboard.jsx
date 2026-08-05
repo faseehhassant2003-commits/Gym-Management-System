@@ -1,6 +1,8 @@
 import { useEffect,useState } from "react";
 import api from "../api/api";
 
+import MemberChart from "../components/MemberChart";
+
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import DashboardCard from "../components/DashboardCard";
@@ -88,7 +90,7 @@ useEffect(() => {
        
 
 <RecentPayments />
-
+<MemberChart/>
         </div>
 
       </div>

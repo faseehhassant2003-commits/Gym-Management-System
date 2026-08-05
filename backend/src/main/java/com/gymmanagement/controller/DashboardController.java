@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import com.gymmanagement.dto.MemberStats;
+
 @RestController
 
 public class DashboardController {
@@ -28,5 +30,12 @@ public class DashboardController {
     @GetMapping("/dashboard/summary")
     public DashboardSummary getDashboardSummary() {
         return dashboardService.getDashboardSummary();
+    }
+
+    @GetMapping("/dashboard/member-stats")
+    public List<MemberStats> getMemberStats() {
+
+        return dashboardService.getMemberStats();
+
     }
 }

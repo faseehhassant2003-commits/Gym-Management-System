@@ -12,6 +12,8 @@ import com.gymmanagement.repository.TrainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gymmanagement.dto.MemberStats;
+
 import java.util.List;
 
 @Service
@@ -50,6 +52,9 @@ public class DashboardService {
                 totalRevenue,
                 totalAttendance
         );
+    }
+    public List<MemberStats> getMemberStats(){
+        return memberRepository.getMemberStats();
     }
 
 
