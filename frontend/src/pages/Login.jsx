@@ -1,3 +1,8 @@
+import api from "../api/api";
+
+
+
+
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 function Login() {
@@ -6,7 +11,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  function handleLogin() {
+  async function handleLogin() {
 
     if (email === "") {
       setError("Please enter your email");
@@ -18,9 +23,46 @@ function Login() {
       return;
     }
     setError("");
+   localStorage.removeItem("token");
+  try {
 
-    navigate("/dashboard");
-  }
+    const response = await api.post("/auth/login", {
+        username: email,
+        password: password
+    });
+
+    if (response.data.success) {
+
+        localStorage.setItem("token", response.data.token);
+
+        navigate("/dashboard");
+
+    } else {
+
+        setError(response.data.message);
+
+        localStorage.removeItem("token");
+
+    }
+
+} catch (error) {
+
+    localStorage.removeItem("token");
+
+    if (error.response) {
+
+        setError(
+            error.response.data.message ||
+            "Invalid username or password"
+        );
+
+    } else {
+
+        setError("Unable to connect to server");
+
+    }
+
+}}
 
   return (
     <div className="container mt-5">

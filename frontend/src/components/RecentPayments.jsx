@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-const API_URL = import.meta.env.VITE_API_URL;
+import api from "../api/api";
 
 function RecentPayments() {
 
     const [payments, setPayments] = useState([]);
 
     useEffect(() => {
-        axios
-            .get(`${API_URL}/dashboard/recent-payments`)
+        api
+            .get("/dashboard/recent-payments")
             .then((response) => {
                 setPayments(response.data);
             })

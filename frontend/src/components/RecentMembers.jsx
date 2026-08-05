@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-const API_URL = import.meta.env.VITE_API_URL;
-
+import api from "../api/api";
 function RecentMembers() {
 
     const [members, setMembers] = useState([]);
@@ -12,8 +10,8 @@ function RecentMembers() {
 
     async function loadRecentMembers() {
         try {
-           const response = await axios.get(
-    `${API_URL}/dashboard/recent-members`);
+           const response = await api.get(
+    "/dashboard/recent-members");
 
             setMembers(response.data);
 
