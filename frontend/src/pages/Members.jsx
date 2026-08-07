@@ -6,6 +6,9 @@ import { toast } from "react-toastify";
 
 
 function Members() {
+    const [createLogin, setCreateLogin] = useState(false);
+const [username, setUsername] = useState("");
+const [password, setPassword] = useState("");
   const [showForm,setShowForm]=useState(false);
   const [memberName, setMemberName] = useState("");
 const [age, setAge] = useState("");
@@ -55,7 +58,23 @@ if(!/^\d{10}$/.test(phone)){
     age:age,
     phone:phone,
     membership:membership,
+     createLogin: createLogin,
+    username: username,
+    password: password
   };
+  if (createLogin) {
+
+    if (username.trim() === "") {
+        toast.warning("Username is required");
+        return;
+    }
+
+    if (password.trim().length < 6) {
+        toast.warning("Password must be at least 6 characters");
+        return;
+    }
+
+}
 try {
     if (editingId === null) {
         await addMember(newMember);
@@ -71,6 +90,9 @@ try {
     setPhone("");
     setMembership("Gold");
     setShowForm(false);
+setCreateLogin(false);
+setUsername("");
+setPassword("");
 
 } catch (error) {
     console.error(error);
@@ -114,6 +136,9 @@ function cancelEdit() {
     setMembership("Gold");
     setEditingId(null);
     setShowForm(false);
+    setCreateLogin(false);
+setUsername("");
+setPassword("");
 }
 const filteredMembers = members.filter((member) =>
     member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||member.phone.includes(searchTerm) || member.membership.toLowerCase().includes(searchTerm.toLowerCase())
@@ -158,28 +183,83 @@ return (
       onChange={(e) => setPhone(e.target.value)}
     />
 
-    <select
-      className="form-select mb-3"
-      value={membership}
-      onChange={(e) => setMembership(e.target.value)}
-    >
-      <option>Gold</option>
-      <option>Silver</option>
-      <option>Platinum</option>
-    </select>
+
+
+ <select
+    className="form-select mb-3"
+    value={membership}
+    onChange={(e) => setMembership(e.target.value)}
+>
+    <option>Gold</option>
+    <option>Silver</option>
+    <option>Platinum</option>
+</select>
+
+{editingId === null && (
+
+    <>
+        <div className="form-check mb-3">
+
+            <input
+                className="form-check-input"
+                type="checkbox"
+                id="createLogin"
+                checked={createLogin}
+                onChange={(e) => setCreateLogin(e.target.checked)}
+            />
+
+            <label
+                className="form-check-label"
+                htmlFor="createLogin"
+            >
+                Create Login Account
+            </label>
+
+        </div>
+
+        {createLogin && (
+
+            <>
+                <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                />
+
+                <input
+                    type="password"
+                    className="form-control mb-3"
+                    placeholder="Initial Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+            </>
+
+        )}
+
+    </>
+
+)}
+
+<div className="mt-3">
 
     <button
-      className="btn btn-success"
-      onClick={saveMember}
+        className="btn btn-success"
+        onClick={saveMember}
     >
-      {editingId===null?"Save Member":"Update Member"}
+        {editingId === null ? "Save Member" : "Update Member"}
     </button>
+
     <button
-    className="btn btn-secondary ms-2"
-    onClick={cancelEdit}
->
-    Cancel
-</button>
+        className="btn btn-secondary ms-2"
+        onClick={cancelEdit}
+    >
+        Cancel
+    </button>
+
+</div>
 
   </div>
 )}
@@ -250,4 +330,4 @@ return (
   );
 }
 
-export default Members;
+export default Members; 

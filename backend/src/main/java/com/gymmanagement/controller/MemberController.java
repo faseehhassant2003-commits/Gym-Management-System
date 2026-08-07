@@ -1,5 +1,6 @@
 package com.gymmanagement.controller;
 
+import com.gymmanagement.dto.MemberRequest;
 import com.gymmanagement.entity.Member;
 import com.gymmanagement.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,8 @@ public class MemberController {
     }
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/members")
-    public Member saveMember(@RequestBody Member member){
-        return memberService.saveMember(member);
+    public Member saveMember(@RequestBody MemberRequest request) {
+        return memberService.saveMember(request);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

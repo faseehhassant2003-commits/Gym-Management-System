@@ -16,6 +16,11 @@ const [phone, setPhone] = useState("");
 const [salary, setSalary] = useState("");
 
 const [editingId, setEditingId] = useState(null);
+
+const [createLogin, setCreateLogin] = useState(false);
+const [username, setUsername] = useState("");
+const [password, setPassword] = useState("");
+
 const [trainers,setTrainers]=useState([])
 
 useEffect(() => {
@@ -54,6 +59,9 @@ setSalary("");
 setAge("");
 setEditingId(null);
 setShowForm(false);
+setCreateLogin(false);
+setUsername("");
+setPassword("");
 
 }
 async function saveTrainer() {
@@ -85,12 +93,28 @@ async function saveTrainer() {
 
   const newTrainer = {
     name: trainerName,
-     age:age,
+    age: age,
     specialization: specialization,
     phone: phone,
     salary: salary,
-   
-  };
+
+    createLogin: createLogin,
+    username: username,
+    password: password
+};
+if (createLogin) {
+
+    if (username.trim() === "") {
+        alert("Please enter username");
+        return;
+    }
+
+    if (password.length < 6) {
+        alert("Password must be at least 6 characters");
+        return;
+    }
+
+}
 
 if(editingId===null){  
    await addTrainer(newTrainer);
@@ -106,6 +130,9 @@ if(editingId===null){
   setSalary("");
   setAge("");
   setShowForm(false);
+  setCreateLogin(false);
+setUsername("");
+setPassword("");
 }
 
   return (
@@ -154,6 +181,55 @@ if(editingId===null){
                         value={age}
                         onChange={(e)=>setAge(e.target.value)}
                          />
+
+                         {editingId === null && (
+
+    <>
+
+        <div className="form-check mb-3">
+
+            <input
+                className="form-check-input"
+                type="checkbox"
+                checked={createLogin}
+                onChange={(e) => setCreateLogin(e.target.checked)}
+                id="createTrainerLogin"
+            />
+
+            <label
+                className="form-check-label"
+                htmlFor="createTrainerLogin"
+            >
+                Create Login Account
+            </label>
+
+        </div>
+
+        {createLogin && (
+
+            <>
+                <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                />
+
+                <input
+                    type="password"
+                    className="form-control mb-3"
+                    placeholder="Initial Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+            </>
+
+        )}
+
+    </>
+
+)}
                          <button className="btn btn-success me-2" onClick={(saveTrainer)}>
                          {editingId===null? "Save Trainer":"Update Trainer"}
                          </button>

@@ -1,4 +1,5 @@
 package com.gymmanagement.controller;
+import com.gymmanagement.dto.TrainerRequest;
 import com.gymmanagement.entity.Trainer;
 import com.gymmanagement.service.TrainerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,9 @@ public class TrainerController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/trainers")
-    public Trainer saveTrainer(@RequestBody Trainer trainer){
-        return trainerService.saveTrainer(trainer);
+    public Trainer saveTrainer(@RequestBody TrainerRequest request){
+
+        return trainerService.saveTrainer(request);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
