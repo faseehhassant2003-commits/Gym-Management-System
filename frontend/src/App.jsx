@@ -1,5 +1,5 @@
 import ProtectedRoute from "./components/ProtectedRoute";
-
+import ManageUsers from "./pages/ManageUsers";
 import WorkoutPlans from "./pages/WorkoutPlans";
 import Login from "./pages/Login";
 import Members from "./pages/Members";
@@ -10,6 +10,7 @@ import DietPlans from "./pages/DietPlans";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import RoleProtectedRoute from "./components/RoleProtectedRoute";
 function App() {
   return (
 <BrowserRouter>
@@ -28,7 +29,9 @@ function App() {
     path="/members"
     element={
         <ProtectedRoute>
+          <RoleProtectedRoute allowedRoles={["ADMIN", "TRAINER"]}>
             <Members />
+          </RoleProtectedRoute>
         </ProtectedRoute>
     }
 />
@@ -56,12 +59,26 @@ function App() {
     }
 />
  <Route
-    path="/WorkoutPlans"
+    path="/workoutplans"
     element={
         <ProtectedRoute>
+          <RoleProtectedRoute allowedRoles={["ADMIN", "TRAINER"]}>
             <WorkoutPlans />
+          </RoleProtectedRoute>
         </ProtectedRoute>
     }
+/>
+
+
+<Route
+  path="/users"
+  element={
+    <ProtectedRoute>
+      <RoleProtectedRoute allowedRoles={["ADMIN"]}>
+        <ManageUsers />
+      </RoleProtectedRoute>
+    </ProtectedRoute>
+  }
 />
 
 
@@ -69,7 +86,9 @@ function App() {
     path="/payments"
     element={
         <ProtectedRoute>
+          <RoleProtectedRoute allowedRoles={["ADMIN"]}>
             <Payments />
+          </RoleProtectedRoute>
         </ProtectedRoute>
     }
 />

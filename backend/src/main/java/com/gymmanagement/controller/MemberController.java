@@ -3,6 +3,7 @@ package com.gymmanagement.controller;
 import com.gymmanagement.entity.Member;
 import com.gymmanagement.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,21 +26,28 @@ import org.springframework.http.HttpStatus;
 public class MemberController {
     @Autowired
     private MemberService memberService;
+
+    @PreAuthorize("hasAnyRole('ADMIN','TRAINER')")
     @GetMapping("/members")
     public List<Member> getAllMembers(){
         return memberService.getAllMembers();
 
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/members")
     public Member saveMember(@RequestBody Member member){
         return memberService.saveMember(member);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/members/{id}")
     public Member updateMember(@PathVariable Long id,
                                @RequestBody Member member) {
 
         return memberService.updateMember(id, member);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/members/{id}")
     public ResponseEntity<?> deleteMember(@PathVariable Long id) {
 

@@ -29,13 +29,13 @@ public class AuthService {
                 .orElse(null);
 
         if (user == null) {
-            return new LoginResponse(false, "Invalid username or password",null);
+            return new LoginResponse(false, "Invalid username or password",null,null);
         }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            return new LoginResponse(false, "Invalid username or password",null);
+            return new LoginResponse(false, "Invalid username or password",null,null);
         }
         String token=jwtService.generateToken(user.getUsername());
-        return new LoginResponse(true, "Login Successful",token);
+        return new LoginResponse(true, "Login Successful",token,user.getRole().name());
     }
 }

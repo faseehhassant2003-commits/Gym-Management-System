@@ -7,14 +7,14 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 function Login() {
   const navigate=useNavigate();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   async function handleLogin() {
 
-    if (email === "") {
-      setError("Please enter your user name");
+    if (username === "") {
+      setError("Please enter your username");
       return;
     }
 
@@ -27,14 +27,15 @@ function Login() {
   try {
 
     const response = await api.post("/auth/login", {
-        username: email,
+        username: username,
         password: password
     });
 
     if (response.data.success) {
 
         localStorage.setItem("token", response.data.token);
-
+        localStorage.setItem("role", response.data.role);
+        localStorage.setItem("username", username);
         navigate("/dashboard");
 
     } else {
@@ -73,8 +74,8 @@ function Login() {
           type="text"
           className="form-control mb-3"
           placeholder="Username"
-          value={email}
-          onChange={(e)=>setEmail(e.target.value)}
+          value={username}
+          onChange={(e)=>setUsername(e.target.value)}
         />
 
         <input
