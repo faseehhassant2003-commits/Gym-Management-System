@@ -1,12 +1,12 @@
 import ProtectedRoute from "./components/ProtectedRoute";
 
+import WorkoutPlans from "./pages/WorkoutPlans";
 import Login from "./pages/Login";
 import Members from "./pages/Members";
 import Trainers from "./pages/Trainers";
 import Attendance from "./pages/Attendance";
 import Payments from "./pages/Payments";
 import DietPlans from "./pages/DietPlans";
-import WorkoutPlans from "./pages/WorkoutPlans";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -55,15 +55,16 @@ function App() {
         </ProtectedRoute>
     }
 />
-
-      <Route
-    path="/workoutPlans"
+ <Route
+    path="/WorkoutPlans"
     element={
         <ProtectedRoute>
             <WorkoutPlans />
         </ProtectedRoute>
     }
 />
+
+
        <Route
     path="/payments"
     element={

@@ -1,6 +1,7 @@
 package com.gymmanagement.service;
 
 import com.gymmanagement.entity.User;
+import com.gymmanagement.enums.Role;
 import com.gymmanagement.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,7 +28,7 @@ public class AdminInitializer implements CommandLineRunner {
 
             admin.setUsername("admin");
             admin.setPassword(passwordEncoder.encode("admin123"));
-            admin.setRole("ADMIN");
+            admin.setRole(Role.ADMIN);
             admin.setEnabled(true);
 
             userRepository.save(admin);

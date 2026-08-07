@@ -43,13 +43,13 @@ function Sidebar() {
             Payments
           </Link>
         </li>
-
-        <li className="nav-item mb-2">
-          <Link to="/workout" className="nav-link text-white">
-            <i className="bi bi-heart-pulse me-2"></i>
-            Workout
+ <li className="nav-item mb-2">
+          <Link to="/WorkoutPlans" className="nav-link text-white">
+            <i className="bi bi-robot me-2"></i>
+            AI Workout
           </Link>
         </li>
+   
 
         <li className="nav-item mb-2">
           <Link to="/diet" className="nav-link text-white">

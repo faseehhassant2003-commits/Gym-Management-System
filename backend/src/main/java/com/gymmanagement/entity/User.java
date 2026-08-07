@@ -1,5 +1,9 @@
 package com.gymmanagement.entity;
 
+import com.gymmanagement.enums.Role;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,8 +27,10 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String role;
+    private Role role;
 
     @Column(nullable = false)
     private boolean enabled = true;

@@ -1,326 +1,205 @@
+import { useState } from "react";
 import Layout from "../layouts/Layout";
-import { useEffect,useState } from "react";
-import {getMembers} from "../api/memberApi";
 import { generateDiet } from "../api/DietApi";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 function DietPlans() {
 
-  const [showForm, setShowForm] = useState(false);
+    const [age, setAge] = useState("");
+    const [height, setHeight] = useState("");
+    const [weight, setWeight] = useState("");
+    const [gender, setGender] = useState("Male");
+    const [goal, setGoal] = useState("Muscle Gain");
+    const [activityLevel, setActivityLevel] = useState("Moderately Active");
+    const [dietPreference, setDietPreference] = useState("Non Vegetarian");
 
-  const [selectedMember, setSelectedMember] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [generatedDiet, setGeneratedDiet] = useState("");
 
-  const [age, setAge] = useState("");
+    async function generateDietPlan() {
 
-  const [height, setHeight] = useState("");
+        if (!age || !height || !weight) {
+            alert("Please fill all required fields.");
+            return;
+        }
 
-  const [weight, setWeight] = useState("");
+        setLoading(true);
 
-  const [gender, setGender] = useState("");
+        try {
 
-  const [goal, setGoal] = useState("");
+            const response = await generateDiet({
+                age: Number(age),
+                gender,
+                height: Number(height),
+                weight: Number(weight),
+                goal,
+                activityLevel,
+                dietPreference
+            });
 
-  const [activityLevel, setActivityLevel] = useState("");
+            setGeneratedDiet(response.data);
 
-  const [dietPreference, setDietPreference] = useState("");
+        } catch (error) {
 
-  const [generatedDiet, setGeneratedDiet] = useState(null);
+            console.error(error);
+            alert("Failed to generate diet plan.");
 
-  const [members, setMembers] = useState([]);
+        } finally {
 
-  useEffect(()=>{
-    loadMembers();
-  },[]);
+            setLoading(false);
 
-async function loadMembers() {
-  const response =await getMembers();
-  console.log(response.data);
-  setMembers(response.data);
-}
+        }
 
-async function generateDietPlan() {
- 
+    }
 
-    const dietRequest = {
-        memberId: selectedMember,
-        age: age,
-        height: height,
-        weight: weight,
-        gender: gender,
-        goal: goal,
-        activityLevel: activityLevel,
-        dietPreference: dietPreference
-    };
+    return (
 
-const response=await generateDiet(dietRequest);
-console.log(response.data);
-setGeneratedDiet(response.data);
+        <Layout>
 
-}
+            <h2 className="mb-4">🥗 AI Diet Generator</h2>
 
-  return (<Layout>
+            <div className="card p-4 shadow-sm">
 
-          <h2>AI Diet Plan Generator</h2>
+                <div className="row">
 
-          <button
-            className="btn btn-primary mb-3"
-            onClick={() => setShowForm(true)}
-          >
-            + Generate Diet Plan
-          </button>
+                    <div className="col-md-3 mb-3">
 
-          {showForm && (
+                        <input
+                            className="form-control"
+                            placeholder="Age"
+                            value={age}
+                            onChange={(e) => setAge(e.target.value)}
+                        />
 
-            <div className="card p-3">
+                    </div>
 
-              <h4>Generate AI Diet Plan</h4>
+                    <div className="col-md-3 mb-3">
 
-        
+                        <input
+                            className="form-control"
+                            placeholder="Height (cm)"
+                            value={height}
+                            onChange={(e) => setHeight(e.target.value)}
+                        />
 
+                    </div>
 
+                    <div className="col-md-3 mb-3">
 
-                <div className="mb-3">
+                        <input
+                            className="form-control"
+                            placeholder="Weight (kg)"
+                            value={weight}
+                            onChange={(e) => setWeight(e.target.value)}
+                        />
 
-    <label className="form-label">
-        Member
-    </label>
+                    </div>
 
-    <select
-        className="form-control"
-        value={selectedMember}
-        onChange={(e) => setSelectedMember(e.target.value)}
-    >
+                    <div className="col-md-3 mb-3">
 
-        <option value="">
-            Select Member
-        </option>
+                        <select
+                            className="form-select"
+                            value={gender}
+                            onChange={(e) => setGender(e.target.value)}
+                        >
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
 
-        {members.map((member) => (
+                    </div>
 
-            <option
-                key={member.id}
-                value={member.id}
-            >
-                {member.name}
-            </option>
+                </div>
 
-        ))}
+                <div className="row">
 
-    </select>
+                    <div className="col-md-4 mb-3">
 
-</div>
+                        <select
+                            className="form-select"
+                            value={goal}
+                            onChange={(e) => setGoal(e.target.value)}
+                        >
+                            <option>Muscle Gain</option>
+                            <option>Weight Loss</option>
+                            <option>Maintenance</option>
+                        </select>
 
+                    </div>
 
+                    <div className="col-md-4 mb-3">
 
+                        <select
+                            className="form-select"
+                            value={activityLevel}
+                            onChange={(e) => setActivityLevel(e.target.value)}
+                        >
+                            <option>Sedentary</option>
+                            <option>Lightly Active</option>
+                            <option>Moderately Active</option>
+                            <option>Very Active</option>
+                        </select>
 
-              <div className="mb-3">
+                    </div>
 
-    <label className="form-label">
-        Age
-    </label>
+                    <div className="col-md-4 mb-3">
 
-    <input
-        type="number"
-        className="form-control"
-        placeholder="Enter Age"
-        value={age}
-        onChange={(e) => setAge(e.target.value)}
-    />
+                        <select
+                            className="form-select"
+                            value={dietPreference}
+                            onChange={(e) => setDietPreference(e.target.value)}
+                        >
+                            <option>Vegetarian</option>
+                            <option>Non Vegetarian</option>
+                            <option>Vegan</option>
+                        </select>
 
-</div>
+                    </div>
 
-         <div className="mb-3">
+                </div>
 
-    <label className="form-label">
-        Height (cm)
-    </label>
+                <button
+                    className="btn btn-success"
+                    onClick={generateDietPlan}
+                    disabled={loading}
+                >
 
-    <input
-        type="number"
-        className="form-control"
-        placeholder="Enter Height in cm"
-        value={height}
-        onChange={(e) => setHeight(e.target.value)}
-    />
+                    {loading
+                        ? "Generating..."
+                        : "Generate AI Diet"}
 
-</div>
+                </button>
 
-             <div className="mb-3">
-
-    <label className="form-label">
-        Weight (kg)
-    </label>
-
-    <input
-        type="number"
-        className="form-control"
-        placeholder="Enter Weight in kg"
-        value={weight}
-        onChange={(e) => setWeight(e.target.value)}
-    />
-
-</div>
-
-            <div className="mb-3">
-
-    <label className="form-label">
-        Gender
-    </label>
-
-    <select
-        className="form-control"
-        value={gender}
-        onChange={(e) => setGender(e.target.value)}
-    >
-
-        <option value="">
-            Select Gender
-        </option>
-
-        <option value="Male">
-            Male
-        </option>
-
-        <option value="Female">
-            Female
-        </option>
-
-    </select>
-
-</div>
-
-             <div className="mb-3">
-
-    <label className="form-label">
-        Goal
-    </label>
-
-    <select
-        className="form-control"
-        value={goal}
-        onChange={(e) => setGoal(e.target.value)}
-    >
-
-        <option value="">
-            Select Goal
-        </option>
-
-        <option value="Muscle Gain">
-            Muscle Gain
-        </option>
-
-        <option value="Weight Loss">
-            Weight Loss
-        </option>
-
-        <option value="Maintenance">
-            Maintenance
-        </option>
-
-    </select>
-
-</div>
-
-             <div className="mb-3">
-
-    <label className="form-label">
-        Activity Level
-    </label>
-
-    <select
-        className="form-control"
-        value={activityLevel}
-        onChange={(e) => setActivityLevel(e.target.value)}
-    >
-
-        <option value="">
-            Select Activity Level
-        </option>
-
-        <option value="Sedentary">
-            Sedentary
-        </option>
-
-        <option value="Lightly Active">
-            Lightly Active
-        </option>
-
-        <option value="Moderately Active">
-            Moderately Active
-        </option>
-
-        <option value="Very Active">
-            Very Active
-        </option>
-
-    </select>
-
-</div>
-
-              <div className="mb-3">
-
-    <label className="form-label">
-        Diet Preference
-    </label>
-
-    <select
-        className="form-control"
-        value={dietPreference}
-        onChange={(e) => setDietPreference(e.target.value)}
-    >
-
-        <option value="">
-            Select Diet Preference
-        </option>
-
-        <option value="Vegetarian">
-            Vegetarian
-        </option>
-
-        <option value="Non Vegetarian">
-            Non Vegetarian
-        </option>
-
-        <option value="Vegan">
-            Vegan
-        </option>
-
-    </select>
-
-</div>
-
-<div className="d-grid">
-
-    <button
-        className="btn btn-success"
-        onClick={generateDietPlan}
-    >
-        Generate AI Diet Plan
-    </button>
-
-</div>
             </div>
 
-          )}
+            {generatedDiet && (
 
-          {generatedDiet && (
+                <div className="card mt-4 shadow-sm">
 
-            <div className="card mt-4 p-3">
+                    <div className="card-header bg-success text-white">
 
-              <h4>Generated Diet Plan</h4>
+                        <h4 className="mb-0">
+                            🥗 AI Diet Plan
+                        </h4>
 
- <div className="ai-diet">
-    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-        {generatedDiet}
-    </ReactMarkdown>
-</div>
-            </div>
+                    </div>
 
-          )}
+                    <div className="card-body">
 
-       </Layout>
-  );
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                            {generatedDiet}
+                        </ReactMarkdown>
+
+                    </div>
+
+                </div>
+
+            )}
+
+        </Layout>
+
+    );
+
 }
 
 export default DietPlans;

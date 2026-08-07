@@ -1,217 +1,187 @@
-import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
 import { useState } from "react";
+import Layout from "../layouts/Layout";
+import { generateWorkout } from "../api/WorkoutApi";
+import ReactMarkdown from "react-markdown";
 
 function WorkoutPlans() {
-  const [memberName, setMemberName] = useState("");
-const [workoutName, setWorkoutName] = useState("");
-const [trainerName, setTrainerName] = useState("");
-const [duration, setDuration] = useState("");
-const [showForm,setShowForm]=useState(false);
-const [editingWorkout, setEditingWorkout] = useState(null);
-const [workOutPlans,setWorkoutPlans]=useState([
-{ 
-              memberName:"Fuad",
-              workoutName:"Chest",
-              trainerName:"Faseeh",
-              duration:"2 hour",
-            
-},
+    const [age, setAge] = useState("");
+    const [height, setHeight] = useState("");
+    const [weight, setWeight] = useState("");
+    const [gender, setGender] = useState("Male");
+    const [goal, setGoal] = useState("Muscle Gain");
+    const [experience, setExperience] = useState("Beginner");
+    const [workoutDays, setWorkoutDays] = useState(5);
+    const [equipment, setEquipment] = useState("Gym");
 
-])
+    const [loading, setLoading] = useState(false);
+    const [result, setResult] = useState("");
 
-function editWorkoutPlan(workOutPlan) {
+    async function handleGenerateWorkout() {
 
-  setMemberName(workOutPlan.memberName);
-  setWorkoutName(workOutPlan.workoutName);
-  setTrainerName(workOutPlan.trainerName);
-  setDuration(workOutPlan.duration);
-
-  setEditingWorkout(
-    workOutPlan.memberName + workOutPlan.workoutName
-  );
-
-  setShowForm(true);
-}
-
-function deleteWorkoutPlan(memberName) {
-
-  const confirmDelete = window.confirm(
-    "Are you sure you want to delete this workout plan?"
-  );
-
-  if (!confirmDelete) {
-    return;
-  }
-
-  const updatedWorkoutPlans = workOutPlans.filter(
-    (workOutPlan) => workOutPlan.memberName !== memberName
-  );
-
-  setWorkoutPlans(updatedWorkoutPlans);
-}
-function cancelWorkoutPlan() {
-  setMemberName("");
-  setWorkoutName("");
-  setTrainerName("");
-  setDuration("");
-
-  setEditingWorkout(null);
-  setShowForm(false);
-}
-
-function saveWorkoutPlan(){
-  if(memberName===""){
-alert("Fill all the box");
-return;
-  }
-   if(workoutName===""){
-alert("Fill all the box");
-return;
-  }
-   if(trainerName===""){
-alert("Fill all the box");
-return;
-  }
-   if(duration===""){
-alert("Fill all the box");
-return;
-  }
-const newWorkoutPlan={
-memberName,
-workoutName,
-trainerName,
-duration,
-};
-if (editingWorkout === null) {
-    setWorkoutPlans([...workOutPlans, newWorkoutPlan]);
-} else {
-    const updatedWorkoutPlans = workOutPlans.map((workOutPlan) => {
-
-        if (
-            workOutPlan.memberName + workOutPlan.workoutName === editingWorkout
-        ) {
-            return newWorkoutPlan;
+        if (!age || !height || !weight) {
+            alert("Please fill all required fields.");
+            return;
         }
 
-        return workOutPlan;
-    });
+        setLoading(true);
 
-    setWorkoutPlans(updatedWorkoutPlans);
-    setEditingWorkout(null);
-}
+        try {
 
-setMemberName("");
-setTrainerName("");
-setDuration("");
-setWorkoutName("");
-setShowForm(false);
+            const response = await generateWorkout({
+                age: Number(age),
+                gender,
+                height: Number(height),
+                weight: Number(weight),
+                goal,
+                experience,
+                workoutDays: Number(workoutDays),
+                equipment
+            });
 
+            setResult(response.data);
 
-}
-  return (
-    <div className="container-fluid">
+        } catch (error) {
 
-      <Navbar />
+            console.error(error);
+            alert("Failed to generate workout plan.");
 
-      <div className="row">
+        } finally {
 
-        <div className="col-3">
-          <Sidebar />
-        </div>
+            setLoading(false);
 
-        <div className="col-9 mt-3">
+        }
+    }
 
-          <h2>Workout Plan Management</h2>
+    return (
+        <Layout>
 
-          <button className="btn btn-primary mb-3" onClick={()=>setShowForm(true)}>
-            + Add Workout Plan
-          
+            <h2 className="mb-4">🤖 AI Workout Generator</h2>
 
+            <div className="card p-4 shadow-sm">
 
-</button>
-          {showForm&&(
-              <div className="card p-3 mb-3">
-                <h4>Add workout Plan</h4>
-                        <input type="text"
-                        className="form-control mb-3"
-                        placeholder="Member Name"
-                        value={memberName}
-                        onChange={(e)=>setMemberName(e.target.value)} 
-                        />
-                        <input type="text"
-                        className="form-control mb-3"
-                        placeholder="Workout name"
-                        value={workoutName}
-                        onChange={(e)=>setWorkoutName(e.target.value)} 
-                        />
-                        <input type="text"
-                        className="form-control mb-3" 
-                        placeholder="Trainer Name"
-                        value={trainerName}
-                        onChange={(e)=>setTrainerName(e.target.value)}
-                        />
+                <div className="row">
+
+                    <div className="col-md-3 mb-3">
                         <input
-                          type="text"
-                          className="form-control mb-3"
-                          placeholder="Duration"
-                          value={duration}
-                          onChange={(e) => setDuration(e.target.value)}
-                      />
-                       <button className="btn btn-primary mb-3" onClick={saveWorkoutPlan}>{editingWorkout === null ? "Save Workout Plan"  : "Update Workout Plan"}</button>
-                       <button className="btn btn-secondary ms-2" onClick={cancelWorkoutPlan}>Cancel</button>
-                       
+                            className="form-control"
+                            placeholder="Age"
+                            value={age}
+                            onChange={(e) => setAge(e.target.value)}
+                        />
+                    </div>
 
+                    <div className="col-md-3 mb-3">
+                        <input
+                            className="form-control"
+                            placeholder="Height (cm)"
+                            value={height}
+                            onChange={(e) => setHeight(e.target.value)}
+                        />
+                    </div>
 
+                    <div className="col-md-3 mb-3">
+                        <input
+                            className="form-control"
+                            placeholder="Weight (kg)"
+                            value={weight}
+                            onChange={(e) => setWeight(e.target.value)}
+                        />
+                    </div>
 
-
-              </div>
-          )}
-
-
-         <table className="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th>Member Name</th>
-                <th>Workout Name</th>
-                <th>Trainer Name</th>
-                <th>Duration</th>
-               <th>Actions</th>
-              </tr>
-
-            </thead>
-            <tbody>
-              {workOutPlans.map((workOutPlan)=>(
-              <tr key={workOutPlan.memberName+workOutPlan.trainerName}>
-
-                <td>{workOutPlan.memberName}</td>
-                <td>{workOutPlan.workoutName}</td>
-                <td>{workOutPlan.trainerName}</td>
-                <td>{workOutPlan.duration}</td>
-                <td>
-                  <button
-                          className="btn btn-primary mb-3"
-                          onClick={()=>editWorkoutPlan(workOutPlan)}
+                    <div className="col-md-3 mb-3">
+                        <select
+                            className="form-select"
+                            value={gender}
+                            onChange={(e) => setGender(e.target.value)}
                         >
-                          Edit
-                        </button>
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
+                    </div>
 
-                      <button className="btn btn-danger btn-sm" onClick={()=>deleteWorkoutPlan(workOutPlan.memberName)}>
-                        Delete
-                      </button>
-                </td>
+                </div>
 
-</tr>
-))}
-            </tbody>
-          </table>
+                <div className="row">
 
-        </div>
+                    <div className="col-md-3 mb-3">
+                        <select
+                            className="form-select"
+                            value={goal}
+                            onChange={(e) => setGoal(e.target.value)}
+                        >
+                            <option>Muscle Gain</option>
+                            <option>Weight Loss</option>
+                            <option>Maintenance</option>
+                        </select>
+                    </div>
 
-      </div>
+                    <div className="col-md-3 mb-3">
+                        <select
+                            className="form-select"
+                            value={experience}
+                            onChange={(e) => setExperience(e.target.value)}
+                        >
+                            <option>Beginner</option>
+                            <option>Intermediate</option>
+                            <option>Advanced</option>
+                        </select>
+                    </div>
 
-    </div>
-  );
+                    <div className="col-md-3 mb-3">
+                        <input
+                            type="number"
+                            className="form-control"
+                            placeholder="Workout Days"
+                            value={workoutDays}
+                            onChange={(e) => setWorkoutDays(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="col-md-3 mb-3">
+                        <select
+                            className="form-select"
+                            value={equipment}
+                            onChange={(e) => setEquipment(e.target.value)}
+                        >
+                            <option>Gym</option>
+                            <option>Home</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <button
+                    className="btn btn-success"
+                    onClick={handleGenerateWorkout}
+                    disabled={loading}
+                >
+                    {loading ? "Generating..." : "Generate AI Workout"}
+                </button>
+
+            </div>
+
+            {result && (
+
+                <div className="card mt-4 shadow-sm">
+
+                    <div className="card-header bg-success text-white">
+                        <h4 className="mb-0">
+                            🏋 AI Workout Plan
+                        </h4>
+                    </div>
+
+                    <div className="card-body">
+                        <ReactMarkdown>
+                            {result}
+                        </ReactMarkdown>
+                    </div>
+
+                </div>
+
+            )}
+
+        </Layout>
+    );
 }
 
 export default WorkoutPlans;
