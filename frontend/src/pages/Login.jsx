@@ -14,7 +14,7 @@ function Login() {
   async function handleLogin() {
 
     if (email === "") {
-      setError("Please enter your email");
+      setError("Please enter your user name");
       return;
     }
 
@@ -70,9 +70,9 @@ function Login() {
         <h2 className="text-center mb-4">Gym Management Login</h2>
 
         <input
-          type="email"
+          type="text"
           className="form-control mb-3"
-          placeholder="Email"
+          placeholder="Username"
           value={email}
           onChange={(e)=>setEmail(e.target.value)}
         />
