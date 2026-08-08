@@ -11,12 +11,14 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import RoleProtectedRoute from "./components/RoleProtectedRoute";
+import Home from "./pages/Home";
 function App() {
   return (
 <BrowserRouter>
 <Routes>
-  <Route path="/" element={<Login/>}/>
-  <Route path="/register" element={<Register/>}/>
+  <Route path="/" element={<Home/>}/>
+ <Route path="/login" element={<Login />} />
+ <Route path="/register" element={<Register />} />
  <Route
     path="/dashboard"
     element={
