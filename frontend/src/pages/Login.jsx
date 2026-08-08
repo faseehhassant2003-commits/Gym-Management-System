@@ -5,15 +5,15 @@ import "../styles/Login.css";
 
 function Login() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   async function handleLogin(e) {
     e.preventDefault();
 
-    if (username === "") {
-      setError("Please enter your username");
+    if (email === "") {
+      setError("Please enter your email");
       return;
     }
 
@@ -27,14 +27,14 @@ function Login() {
 
     try {
       const response = await api.post("/auth/login", {
-        username: username,
+        email: email,
         password: password,
       });
 
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("role", response.data.role);
-        localStorage.setItem("username", username);
+        localStorage.setItem("email", email);
         navigate("/dashboard");
       } else {
         setError(response.data.message);
@@ -44,7 +44,7 @@ function Login() {
       localStorage.removeItem("token");
 
       if (error.response) {
-        setError(error.response.data.message || "Invalid username or password");
+        setError(error.response.data.message || "Invalid email or password");
       } else {
         setError("Unable to connect to server");
       }
@@ -71,13 +71,13 @@ function Login() {
 
           <form onSubmit={handleLogin}>
             <div className="login-form-group">
-              <label className="login-label">Username</label>
+              <label className="login-label">Email</label>
               <input
                 type="text"
                 className="form-control login-input"
-                placeholder="Enter your username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Enter your Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 

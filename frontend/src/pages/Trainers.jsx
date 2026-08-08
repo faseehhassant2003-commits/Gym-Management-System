@@ -21,6 +21,8 @@ const [createLogin, setCreateLogin] = useState(false);
 const [username, setUsername] = useState("");
 const [password, setPassword] = useState("");
 
+const [email, setEmail] = useState("");
+
 const [trainers,setTrainers]=useState([])
 
 useEffect(() => {
@@ -60,7 +62,7 @@ setAge("");
 setEditingId(null);
 setShowForm(false);
 setCreateLogin(false);
-setUsername("");
+setEmail("");
 setPassword("");
 
 }
@@ -99,15 +101,16 @@ async function saveTrainer() {
     salary: salary,
 
     createLogin: createLogin,
-    username: username,
+    email: email,
     password: password
 };
 if (createLogin) {
 
-    if (username.trim() === "") {
-        alert("Please enter username");
-        return;
-    }
+
+if (!/\S+@\S+\.\S+/.test(email)) {
+    alert("Please enter a valid email");
+    return;
+}
 
     if (password.length < 6) {
         alert("Password must be at least 6 characters");
@@ -131,7 +134,7 @@ if(editingId===null){
   setAge("");
   setShowForm(false);
   setCreateLogin(false);
-setUsername("");
+setEmail("");
 setPassword("");
 }
 
@@ -209,11 +212,11 @@ setPassword("");
 
             <>
                 <input
-                    type="text"
+                    type="email"
                     className="form-control mb-3"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                 />
 
                 <input

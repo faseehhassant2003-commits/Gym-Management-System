@@ -37,13 +37,17 @@ public class TrainerService {
 
         if (request.isCreateLogin()) {
 
-            if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-                throw new RuntimeException("Username already exists.");
+            if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+                throw new RuntimeException("Email already exists.");
             }
 
             User user = new User();
 
-            user.setUsername(request.getUsername());
+            user.setEmail(request.getEmail());
+
+// Temporary (until we remove the username column)
+            user.setUsername(request.getEmail());
+
             user.setPassword(passwordEncoder.encode(request.getPassword()));
             user.setRole(Role.TRAINER);
             user.setEnabled(true);

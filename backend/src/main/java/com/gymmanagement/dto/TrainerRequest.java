@@ -10,6 +10,6 @@ public class TrainerRequest {
     private Double salary;
 
     private boolean createLogin;
-    private String username;
+    private String email;
     private String password;
 }

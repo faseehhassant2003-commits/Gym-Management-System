@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Login.css";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import api from "../api/api";
+
+
 
 function RegisterMember() {
   const [name, setName] = useState("");
@@ -10,8 +15,9 @@ function RegisterMember() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
-  function handleRegister(e) {
+  async function handleRegister(e) {
     e.preventDefault();
     setError("");
     setSuccess("");
@@ -26,10 +32,10 @@ function RegisterMember() {
       return;
     }
 
-    if (phone.trim() === "") {
-      setError("Please enter your phone number.");
-      return;
-    }
+   if (!/^\d{10}$/.test(phone)) {
+    setError("Phone number must contain exactly 10 digits.");
+    return;
+}
 
     if (password.length < 6) {
       setError("Password must be at least 6 characters long.");
@@ -41,8 +47,44 @@ function RegisterMember() {
       return;
     }
 
-    setSuccess("Your account details look good. Backend integration can be added next.");
-  }
+try {
+
+    const response = await api.post("/auth/register", {
+        name,
+        email,
+        phone,
+        password
+    });
+
+    if (response.data.success) {
+
+        toast.success("Registration Successful!");
+
+        setSuccess("");
+
+        setTimeout(() => {
+            navigate("/login");
+        }, 1500);
+
+    } else {
+
+        setError(response.data.message);
+
+    }
+
+} catch (error) {
+
+    if (error.response) {
+
+        setError(error.response.data.message);
+
+    } else {
+
+        setError("Unable to connect to server");
+
+    }
+
+}  }
 
   return (
     <div className="login-page">
