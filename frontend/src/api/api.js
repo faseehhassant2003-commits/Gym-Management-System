@@ -1,5 +1,4 @@
 import axios from "axios";
-import ManageUsers from "../pages/ManageUsers";
 
 console.log("API URL:", import.meta.env.VITE_API_URL);
 
@@ -12,15 +11,30 @@ const api = axios.create({
 
 api.interceptors.request.use(
     (config) => {
+
         const token = localStorage.getItem("token");
 
-        if (token && config.url !== "/auth/login") {
+        // Do NOT attach JWT to authentication/registration endpoints
+        const publicEndpoints = [
+            "/auth/login",
+            "/auth/send-otp",
+            "/auth/verify-otp",
+            "/auth/register"
+        ];
+
+        if (
+            token &&
+            !publicEndpoints.includes(config.url)
+        ) {
             config.headers.Authorization = `Bearer ${token}`;
         }
 
         return config;
     },
-    (error) => Promise.reject(error)
+
+    (error) => {
+        return Promise.reject(error);
+    }
 );
 
 export default api;
