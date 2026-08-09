@@ -9,6 +9,8 @@ import Payments from "./pages/Payments";
 import DietPlans from "./pages/DietPlans";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
+import Layout from "./layouts/Layout";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import RoleProtectedRoute from "./components/RoleProtectedRoute";
 import Home from "./pages/Home";
@@ -27,6 +29,17 @@ function App() {
         </ProtectedRoute>
     }
 />
+<Route
+  path="/profile"
+  element={
+    <ProtectedRoute>
+      <Layout>
+        <Profile />
+      </Layout>
+    </ProtectedRoute>
+  }
+/>
+
 <Route
     path="/members"
     element={

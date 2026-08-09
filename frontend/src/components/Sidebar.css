@@ -9,3 +9,22 @@
     padding: 20px;
     overflow-y: auto;
 }
+
+.member-profile {
+    padding: 10px 12px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.03);
+}
+.member-profile .member-name {
+    font-weight: 600;
+}
+.member-profile .member-username {
+    font-size: 0.85rem;
+    color: #ced4da;
+    margin-bottom: 6px;
+}
+.member-profile .member-info {
+    font-size: 0.85rem;
+    color: #adb5bd;
+    line-height: 1.3;
+}

@@ -16,3 +16,11 @@ export const updateMember = (id, member) => {
 export const deleteMember = (id) => {
     return api.delete(`/members/${id}`);
 };
+
+export const getMemberProfile = () => {
+    return api.get(`/members/profile`);
+};
+
+export const updateMemberProfile = (payload) => {
+    return api.put(`/members/profile`, payload);
+};

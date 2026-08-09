@@ -1,20 +1,21 @@
 package com.gymmanagement.dto;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class MemberRequest {
+@Getter
+@Setter
+@AllArgsConstructor
+public class MemberProfileResponse {
 
+    private Long id;
     private String name;
     private int age;
     private String phone;
     private String membership;
     private double height;
     private double weight;
-
-    // Login Account
-    private boolean createLogin;
     private String email;
-    private String password;
-
+    private String username;
 }

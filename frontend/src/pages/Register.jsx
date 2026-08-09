@@ -162,7 +162,7 @@ function RegisterMember() {
           error.response.data?.message ||
           error.response.data ||
           "Unable to send OTP. "+
-          "OR email is already registered."
+          "may be email is already registered."
         );
 
       } else {

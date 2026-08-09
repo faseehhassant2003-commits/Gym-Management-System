@@ -19,6 +19,10 @@ public class Member {
 
     private String membership;
 
+    private double height;
+
+    private double weight;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;

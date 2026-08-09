@@ -11,6 +11,16 @@ function Sidebar() {
 
       <ul className="nav flex-column">
 
+        {/* Profile (Member) */}
+        {role === "MEMBER" && (
+          <li className="nav-item mb-2">
+            <Link to="/profile" className="nav-link text-white">
+              <i className="bi bi-person-circle me-2"></i>
+              Profile
+            </Link>
+          </li>
+        )}
+
         {/* Dashboard (Everyone) */}
         <li className="nav-item mb-2">
           <Link to="/dashboard" className="nav-link text-white">

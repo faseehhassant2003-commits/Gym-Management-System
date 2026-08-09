@@ -1,5 +1,6 @@
 package com.gymmanagement.controller;
 
+import com.gymmanagement.dto.MemberProfileResponse;
 import com.gymmanagement.dto.MemberRequest;
 import com.gymmanagement.entity.Member;
 import com.gymmanagement.service.MemberService;
@@ -66,5 +67,17 @@ public class MemberController {
 
         }
 
+    }
+
+    @PreAuthorize("hasRole('MEMBER')")
+    @GetMapping("/members/profile")
+    public MemberProfileResponse getMyProfile() {
+        return memberService.getCurrentMemberProfile();
+    }
+
+    @PreAuthorize("hasRole('MEMBER')")
+    @PutMapping("/members/profile")
+    public MemberProfileResponse updateMyProfile(@RequestBody MemberRequest request) {
+        return memberService.updateCurrentMemberProfile(request);
     }
 }
