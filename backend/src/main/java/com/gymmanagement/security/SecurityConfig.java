@@ -47,14 +47,27 @@ public class SecurityConfig {
                                 "/**"
                         ).permitAll()
 
+                        // Authentication endpoints
                         .requestMatchers(
                                 "/auth/**",
                                 "/mail-test"
                         ).permitAll()
 
+                        // Workout API
                         .requestMatchers(
                                 "/workout/**"
                         ).permitAll()
+
+                        // Members + Admin can view active subscription plans
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/subscription-plans/active"
+                        ).hasAnyRole("ADMIN", "MEMBER")
+
+                        // Only ADMIN can create/update/delete/manage plans
+                        .requestMatchers(
+                                "/api/subscription-plans/**"
+                        ).hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )

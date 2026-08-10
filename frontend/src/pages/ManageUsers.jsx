@@ -42,7 +42,12 @@ function ManageUsers() {
     }
   }
 
-  async function handleDelete(id) {
+  async function handleDelete(id, username) {
+    if (username === loggedInUsername) {
+      alert("You cannot delete your own account from Manage Users.");
+      return;
+    }
+
     if (!window.confirm("Delete this user?")) return;
 
     try {
@@ -148,7 +153,7 @@ function ManageUsers() {
                         disabled={user.username === loggedInUsername}
                           className="btn btn-danger"
                           onClick={() =>
-                            handleDelete(user.id)
+                            handleDelete(user.id, user.username)
                           }
                         >
                           Delete

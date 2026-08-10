@@ -6,11 +6,13 @@ import Members from "./pages/Members";
 import Trainers from "./pages/Trainers";
 import Attendance from "./pages/Attendance";
 import Payments from "./pages/Payments";
+import SubscriptionPlans from "./pages/SubscriptionPlans";
 import DietPlans from "./pages/DietPlans";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import QRScanner from "./pages/QRScanner";
+import Subscription from "./pages/Subscription";
 import Layout from "./layouts/Layout";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import RoleProtectedRoute from "./components/RoleProtectedRoute";
@@ -31,12 +33,32 @@ function App() {
     }
 />
 <Route
+  path="/subscription"
+  element={
+    <ProtectedRoute>
+      <RoleProtectedRoute allowedRoles={["MEMBER"]}>
+        <Subscription />
+      </RoleProtectedRoute>
+    </ProtectedRoute>
+  }
+/>
+<Route
   path="/profile"
   element={
     <ProtectedRoute>
       <Layout>
         <Profile />
       </Layout>
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/subscription-plans"
+  element={
+    <ProtectedRoute>
+      <RoleProtectedRoute allowedRoles={["ADMIN"]}>
+        <SubscriptionPlans />
+      </RoleProtectedRoute>
     </ProtectedRoute>
   }
 />

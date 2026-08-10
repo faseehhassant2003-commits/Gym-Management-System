@@ -1,56 +1,67 @@
-.scanner-page {
-  display: flex;
-  justify-content: center;
-}
-
-.scanner-card {
+.qr-scanner-modal-content {
   width: 100%;
-  max-width: 960px;
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
-  padding: 24px;
-}
-
-.scanner-header {
-  margin-bottom: 18px;
-}
-
-.scanner-description {
-  margin: 0;
-  color: #6c757d;
 }
 
 .scanner-body {
   display: grid;
-  grid-template-columns: 1.6fr 1fr;
-  gap: 18px;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
 }
 
-.scanner-preview {
+.scanner-camera {
+  position: relative;
+  width: 100%;
   min-height: 360px;
-  border-radius: 18px;
-  background: #000000;
+
+  background: #000;
+  border-radius: 16px;
   overflow: hidden;
 }
 
+.scanner-preview {
+  display: block;
+
+  width: 100%;
+  height: 360px;
+
+  object-fit: cover;
+  background: #000;
+}
+
+.scanner-camera-message {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  color: #ffffff;
+  text-align: center;
+  font-size: 1rem;
+}
+
 .scanner-details {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+  width: 100%;
 }
 
 .scanner-status {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.5rem;
+
   font-weight: 600;
+
+  margin-bottom: 0.75rem;
 }
 
 .status-dot {
   width: 12px;
   height: 12px;
+
   border-radius: 50%;
+
   background: #adb5bd;
 }
 
@@ -60,16 +71,44 @@
 
 .scanner-error {
   color: #dc3545;
+
+  padding: 0.75rem;
+
+  background: #fff5f5;
+  border-radius: 8px;
+}
+
+.scanner-date-info {
+  padding: 0.75rem 1rem;
+
+  margin-bottom: 1rem;
+
+  background: #f8f9fa;
+
+  border-radius: 10px;
+
+  color: #495057;
 }
 
 .scanner-result label {
   display: block;
-  margin-bottom: 6px;
+
+  margin-bottom: 0.5rem;
+
   color: #495057;
+  font-weight: 600;
 }
 
 @media (max-width: 768px) {
   .scanner-body {
     grid-template-columns: 1fr;
+  }
+
+  .scanner-camera {
+    min-height: 300px;
+  }
+
+  .scanner-preview {
+    height: 300px;
   }
 }

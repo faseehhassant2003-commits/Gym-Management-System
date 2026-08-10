@@ -101,6 +101,15 @@ public class MemberService {
         return mapToProfileResponse(member);
     }
 
+    public MemberProfileResponse getMemberByQrToken(String qrToken) {
+        Member member = memberRepository.findByQrToken(qrToken)
+                .orElseThrow(() -> new RuntimeException(
+                        "Member not found for scanned token."
+                ));
+
+        return mapToProfileResponse(member);
+    }
+
     public MemberProfileResponse updateCurrentMemberProfile(MemberRequest request) {
         Member member = getAuthenticatedMember();
 

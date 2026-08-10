@@ -18,6 +18,10 @@ function RegisterMember() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  // Height/weight
+  const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState("");
+
   // OTP
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [otp, setOtp] = useState("");
@@ -93,6 +97,16 @@ function RegisterMember() {
       return;
     }
 
+    if (!height || Number(height) <= 0) {
+      setError("Please enter a valid height.");
+      return;
+    }
+
+    if (!weight || Number(weight) <= 0) {
+      setError("Please enter a valid weight.");
+      return;
+    }
+
     if (password.length < 6) {
       setError("Password must be at least 6 characters long.");
       return;
@@ -120,6 +134,8 @@ function RegisterMember() {
         name: name,
         email: email,
         phone: phone,
+        height: Number(height),
+        weight: Number(weight),
         password: password
 
       });
@@ -136,6 +152,8 @@ function RegisterMember() {
         name: name,
         email: email,
         phone: phone,
+        height: Number(height),
+        weight: Number(weight),
         password: password
 
       });
@@ -227,6 +245,10 @@ function RegisterMember() {
           email: registrationData.email,
 
           phone: registrationData.phone,
+
+          height: registrationData.height,
+
+          weight: registrationData.weight,
 
           password: registrationData.password,
 
@@ -530,6 +552,39 @@ function RegisterMember() {
 
             </div>
 
+            <div className="login-form-group">
+
+              <label className="login-label">
+                Height (cm)
+              </label>
+
+              <input
+                type="number"
+                step="0.1"
+                className="form-control login-input"
+                placeholder="Enter your height"
+                value={height}
+                onChange={(e) => setHeight(e.target.value)}
+              />
+
+            </div>
+
+            <div className="login-form-group">
+
+              <label className="login-label">
+                Weight (kg)
+              </label>
+
+              <input
+                type="number"
+                step="0.1"
+                className="form-control login-input"
+                placeholder="Enter your weight"
+                value={weight}
+                onChange={(e) => setWeight(e.target.value)}
+              />
+
+            </div>
 
             {/* PASSWORD */}
 

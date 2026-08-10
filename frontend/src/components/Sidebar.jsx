@@ -29,6 +29,9 @@ function Sidebar() {
           </Link>
         </li>
 
+
+
+ 
         {/* ADMIN & TRAINER */}
         {(role === "ADMIN" || role === "TRAINER") && (
           <>
@@ -79,7 +82,12 @@ function Sidebar() {
               </Link>
             </li>
             
-
+  <li>
+  <Link to="/subscription-plans">
+    <span>💳</span>
+    Subscription Plans
+  </Link>
+</li>
 
 
             <li className="nav-item mb-2">
@@ -109,6 +117,14 @@ function Sidebar() {
                 My Workout
               </Link>
             </li>
+
+            
+     <li className="nav-item mb-2">
+  <Link to="/subscription" className="nav-link text-white">
+    <i className="bi bi-credit-card me-2"></i>
+    Subscription
+  </Link>
+</li>
 
             <li className="nav-item mb-2">
               <Link to="/my-diet" className="nav-link text-white">

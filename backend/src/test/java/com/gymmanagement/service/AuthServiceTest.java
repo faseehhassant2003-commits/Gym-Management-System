@@ -84,7 +84,7 @@ class AuthServiceTest {
 
         when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("secret123", "encoded-password")).thenReturn(true);
-        when(jwtService.generateToken("user@example.com", "qr")).thenReturn("jwt-token");
+        when(jwtService.generateToken("user@example.com", "auth")).thenReturn("auth-jwt-token");
 
         LoginResponse response = authService.login(request);
 
@@ -92,7 +92,7 @@ class AuthServiceTest {
         String json = mapper.writeValueAsString(response);
 
         assertTrue(response.isSuccess());
-        assertEquals("jwt-token", response.getQrToken());
-        assertTrue(json.contains("\"qrToken\":\"jwt-token\""));
+        assertEquals("auth-jwt-token", response.getToken());
+        assertTrue(json.contains("\"token\":\"auth-jwt-token\""));
     }
 }

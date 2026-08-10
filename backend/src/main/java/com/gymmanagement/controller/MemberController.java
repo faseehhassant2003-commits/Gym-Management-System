@@ -81,4 +81,10 @@ public class MemberController {
     public MemberProfileResponse updateMyProfile(@RequestBody MemberRequest request) {
         return memberService.updateCurrentMemberProfile(request);
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN','TRAINER')")
+    @GetMapping("/members/scan/{qrToken}")
+    public MemberProfileResponse getMemberByQrToken(@PathVariable String qrToken) {
+        return memberService.getMemberByQrToken(qrToken);
+    }
 }
