@@ -91,6 +91,15 @@ function Sidebar() {
           </>
         )}
 
+        {(role === "ADMIN" || role === "TRAINER") && (
+          <li className="nav-item mb-2">
+            <Link to="/qr-scanner" className="nav-link text-white">
+              <i className="bi bi-upc-scan me-2"></i>
+              QR Scanner
+            </Link>
+          </li>
+        )}
+
         {/* MEMBER ONLY */}
         {role === "MEMBER" && (
           <>

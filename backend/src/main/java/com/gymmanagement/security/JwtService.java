@@ -20,15 +20,23 @@ private static final String SECRET =
 private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
 public String generateToken(String username) {
+    return generateToken(username, "auth");
+}
 
+public String generateToken(String username, String tokenType) {
     return Jwts.builder()
             .setSubject(username)
+            .claim("type", tokenType)
             .setIssuedAt(new Date())
             .setExpiration(
                     new Date(System.currentTimeMillis() + 1000 * 60 * 60)
             )
             .signWith(key, SignatureAlgorithm.HS256)
             .compact();
+}
+
+public String extractTokenType(String token) {
+    return extractClaim(token, claims -> claims.get("type", String.class));
 }
 
 private Claims extractAllClaims(String token) {
@@ -55,6 +63,11 @@ private Claims extractAllClaims(String token) {
 
         return username.equals(userDetails.getUsername())
                 && !isTokenExpired(token);
+    }
+
+    public boolean isAuthTokenValid(String token, UserDetails userDetails) {
+        return "auth".equals(extractTokenType(token))
+                && isTokenValid(token, userDetails);
     }
 
 public <T> T extractClaim(

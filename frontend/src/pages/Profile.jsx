@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { QRCodeCanvas } from "qrcode.react";
 import { getMemberProfile, updateMemberProfile } from "../api/memberApi";
 import { toast } from "react-toastify";
 import "./Profile.css";
@@ -46,8 +47,16 @@ function Profile() {
   if (error) return <div className="profile-page container mt-5">Error loading profile</div>;
   if (!profile) return null;
 
-  const initials = profile.name
-    ? profile.name
+  const profileData = profile.member ?? profile;
+  const tokenValue =
+    profile.token ||
+    profile.member?.token ||
+    profileData.token ||
+    profileData.qrToken ||
+    profileData.qr_code;
+
+  const initials = profileData.name
+    ? profileData.name
         .split(" ")
         .map((n) => n[0])
         .slice(0, 2)
@@ -94,8 +103,28 @@ function Profile() {
         <div className="profile-header">
           <div className="profile-avatar">{initials}</div>
           <div className="profile-title">
-            <h2>{profile.name}</h2>
-            <div className="profile-username">@{profile.username}</div>
+            <h2>{profileData.name}</h2>
+            <div className="profile-username">@{profileData.username}</div>
+          </div>
+        </div>
+
+        <div className="profile-qr-section mb-4">
+          <div className="qr-section-header">
+            <div>
+              <h5>Member QR Code</h5>
+              <p className="qr-description">
+                {tokenValue
+                  ? "Scan this code for member validation or token transfer."
+                  : "No QR token is available for this profile yet. Contact admin if it should be generated."}
+              </p>
+            </div>
+          </div>
+          <div className="qr-code-wrapper">
+            {tokenValue ? (
+              <QRCodeCanvas value={tokenValue} size={200} bgColor="#ffffff" fgColor="#1a1a1a" />
+            ) : (
+              <div className="qr-placeholder">Token unavailable</div>
+            )}
           </div>
         </div>
 

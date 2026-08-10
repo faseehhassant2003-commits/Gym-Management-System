@@ -18,4 +18,5 @@ public class MemberProfileResponse {
     private double weight;
     private String email;
     private String username;
+    private String qrToken;
 }

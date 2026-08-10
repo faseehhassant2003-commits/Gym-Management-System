@@ -10,6 +10,7 @@ import DietPlans from "./pages/DietPlans";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
+import QRScanner from "./pages/QRScanner";
 import Layout from "./layouts/Layout";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import RoleProtectedRoute from "./components/RoleProtectedRoute";
@@ -36,6 +37,18 @@ function App() {
       <Layout>
         <Profile />
       </Layout>
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/qr-scanner"
+  element={
+    <ProtectedRoute>
+      <RoleProtectedRoute allowedRoles={["ADMIN", "TRAINER"]}>
+        <Layout>
+          <QRScanner />
+        </Layout>
+      </RoleProtectedRoute>
     </ProtectedRoute>
   }
 />

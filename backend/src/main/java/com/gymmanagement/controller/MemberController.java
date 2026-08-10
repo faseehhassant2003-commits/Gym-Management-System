@@ -1,5 +1,6 @@
 package com.gymmanagement.controller;
 
+import com.gymmanagement.dto.MemberCreationResponse;
 import com.gymmanagement.dto.MemberProfileResponse;
 import com.gymmanagement.dto.MemberRequest;
 import com.gymmanagement.entity.Member;
@@ -37,7 +38,7 @@ public class MemberController {
     }
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/members")
-    public Member saveMember(@RequestBody MemberRequest request) {
+    public MemberCreationResponse saveMember(@RequestBody MemberRequest request) {
         return memberService.saveMember(request);
     }
 

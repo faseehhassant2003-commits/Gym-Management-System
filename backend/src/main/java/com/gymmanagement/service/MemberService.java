@@ -1,5 +1,6 @@
 package com.gymmanagement.service;
 
+import com.gymmanagement.dto.MemberCreationResponse;
 import com.gymmanagement.enums.Role;
 import com.gymmanagement.entity.User;
 import com.gymmanagement.dto.MemberRequest;
@@ -8,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import com.gymmanagement.dto.MemberProfileResponse;
 import com.gymmanagement.entity.Member;
 import com.gymmanagement.repository.MemberRepository;
+import com.gymmanagement.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class MemberService {
@@ -29,10 +32,13 @@ public class MemberService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtService jwtService;
+
     public List<Member> getAllMembers() {
         return memberRepository.findAll();
     }
-    public Member saveMember(MemberRequest request) {
+    public MemberCreationResponse saveMember(MemberRequest request) {
 
         Member member = new Member();
 
@@ -40,10 +46,14 @@ public class MemberService {
         member.setAge(request.getAge());
         member.setPhone(request.getPhone());
         member.setMembership(request.getMembership());
+        member.setHeight(request.getHeight());
+        member.setWeight(request.getWeight());
+        member.setQrToken(UUID.randomUUID().toString());
+
+        String token = null;
 
         if (request.isCreateLogin()) {
 
-            // Check whether email already exists
             if (userRepository.findByEmail(request.getEmail()).isPresent()) {
                 throw new RuntimeException(
                         "Email already exists."
@@ -51,24 +61,18 @@ public class MemberService {
             }
 
             User user = new User();
-
-            // Email is now the login identifier
             user.setEmail(request.getEmail());
-
-            // Keep username same as email for compatibility
             user.setUsername(request.getEmail());
-
-            user.setPassword(
-                    passwordEncoder.encode(request.getPassword())
-            );
-
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
             user.setRole(Role.MEMBER);
             user.setEnabled(true);
 
             member.setUser(user);
+            token = jwtService.generateToken(user.getEmail());
         }
 
-        return memberRepository.save(member);
+        Member savedMember = memberRepository.save(member);
+        return new MemberCreationResponse(true, "Member created successfully", token, savedMember);
     }
     public Member updateMember(Long id, Member member) {
 
@@ -148,7 +152,8 @@ public class MemberService {
                 member.getHeight(),
                 member.getWeight(),
                 member.getUser() != null ? member.getUser().getEmail() : null,
-                member.getUser() != null ? member.getUser().getUsername() : null
+                member.getUser() != null ? member.getUser().getUsername() : null,
+                member.getQrToken()
         );
     }
 }

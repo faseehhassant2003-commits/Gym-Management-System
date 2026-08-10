@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.gymmanagement.entity.OtpVerification;
 import com.gymmanagement.repository.OtpRepository;
+import java.util.UUID;
 @Service
 public class AuthService {
     private final MemberRepository memberRepository;
@@ -43,14 +44,21 @@ public class AuthService {
                 .orElse(null);
 
         if (user == null) {
-            return new LoginResponse(false, "Invalid email or password",null,null);
+            return new LoginResponse(false, "Invalid email or password", null, null);
         }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            return new LoginResponse(false, "Invalid email or password",null,null);
+            return new LoginResponse(false, "Invalid email or password", null, null);
         }
-        String token=jwtService.generateToken(user.getEmail());
-        return new LoginResponse(true, "Login Successful",token,user.getRole().name());
+
+        String authToken = jwtService.generateToken(user.getEmail(), "auth");
+
+        return new LoginResponse(
+                true,
+                "Login Successful",
+                authToken,
+                user.getRole().name()
+        );
     }
     public RegisterResponse register(RegisterRequest request) {
 
@@ -72,6 +80,7 @@ public class AuthService {
         member.setPhone(request.getPhone());
         member.setAge(18);              // temporary default
         member.setMembership("Basic");  // temporary default
+        member.setQrToken(UUID.randomUUID().toString());
 
         member.setUser(user);
 
@@ -176,6 +185,8 @@ public class AuthService {
         member.setAge(18);
 
         member.setMembership("Basic");
+
+        member.setQrToken(UUID.randomUUID().toString());
 
         member.setUser(user);
 
