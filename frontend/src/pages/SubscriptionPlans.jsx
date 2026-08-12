@@ -8,6 +8,11 @@ import {
   deleteSubscriptionPlan,
 } from "../api/SubscriptionPlanApi";
 
+import {
+  getAllSubscriptions,
+  deactivateSubscription,
+} from "../api/MemberSubscriptionApi";
+
 import "./SubscriptionPlans.css";
 
 function SubscriptionPlans() {
@@ -23,20 +28,79 @@ function SubscriptionPlans() {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
 
+  // Subscribed members
+  const [showSubscribedMembers, setShowSubscribedMembers] =
+    useState(false);
+
+  const [subscriptions, setSubscriptions] = useState([]);
+
+  const [loadingSubscriptions, setLoadingSubscriptions] =
+    useState(false);
+
+
+  // ==============================
+  // LOAD PLANS
+  // ==============================
+
   useEffect(() => {
     loadPlans();
   }, []);
 
+
   async function loadPlans() {
+
     try {
+
       const response = await getSubscriptionPlans();
+
       setPlans(response.data);
+
     } catch (error) {
-      console.error("Unable to load subscription plans", error);
+
+      console.error(
+        "Unable to load subscription plans",
+        error
+      );
+
     }
   }
 
+
+  // ==============================
+  // LOAD SUBSCRIBED MEMBERS
+  // ==============================
+
+  async function loadSubscriptions() {
+
+    setLoadingSubscriptions(true);
+
+    try {
+
+      const response = await getAllSubscriptions();
+
+      setSubscriptions(response.data);
+
+    } catch (error) {
+
+      console.error(
+        "Unable to load subscribed members",
+        error
+      );
+
+    } finally {
+
+      setLoadingSubscriptions(false);
+
+    }
+  }
+
+
+  // ==============================
+  // OPEN ADD FORM
+  // ==============================
+
   function openAddForm() {
+
     setEditingPlan(null);
 
     setName("");
@@ -47,7 +111,13 @@ function SubscriptionPlans() {
     setShowForm(true);
   }
 
+
+  // ==============================
+  // OPEN EDIT FORM
+  // ==============================
+
   function openEditForm(plan) {
+
     setEditingPlan(plan);
 
     setName(plan.name);
@@ -58,7 +128,13 @@ function SubscriptionPlans() {
     setShowForm(true);
   }
 
+
+  // ==============================
+  // CANCEL FORM
+  // ==============================
+
   function cancelForm() {
+
     setEditingPlan(null);
 
     setName("");
@@ -69,32 +145,52 @@ function SubscriptionPlans() {
     setShowForm(false);
   }
 
+
+  // ==============================
+  // SAVE PLAN
+  // ==============================
+
   async function savePlan() {
 
     if (!name.trim()) {
+
       alert("Please enter plan name");
+
       return;
     }
+
 
     if (!durationDays || Number(durationDays) <= 0) {
+
       alert("Please enter a valid duration");
+
       return;
     }
+
 
     if (price === "" || Number(price) < 0) {
+
       alert("Please enter a valid price");
+
       return;
     }
 
+
     const planData = {
+
       name: name.trim(),
+
       durationDays: Number(durationDays),
+
       price: Number(price),
+
       description: description.trim(),
+
       active: editingPlan
         ? editingPlan.active
         : true,
     };
+
 
     try {
 
@@ -111,6 +207,7 @@ function SubscriptionPlans() {
 
       }
 
+
       await loadPlans();
 
       cancelForm();
@@ -122,8 +219,14 @@ function SubscriptionPlans() {
         error.response?.data ||
         "Unable to save subscription plan"
       );
+
     }
   }
+
+
+  // ==============================
+  // DELETE PLAN
+  // ==============================
 
   async function handleDelete(id) {
 
@@ -131,9 +234,13 @@ function SubscriptionPlans() {
       "Are you sure you want to delete this subscription plan?"
     );
 
+
     if (!confirmed) {
+
       return;
+
     }
+
 
     try {
 
@@ -148,18 +255,31 @@ function SubscriptionPlans() {
         error.response?.data ||
         "Unable to delete subscription plan"
       );
+
     }
   }
+
+
+  // ==============================
+  // ACTIVATE / DEACTIVATE PLAN
+  // ==============================
 
   async function handleDeactivate(plan) {
 
     const updatedPlan = {
+
       name: plan.name,
+
       durationDays: plan.durationDays,
+
       price: plan.price,
+
       description: plan.description || "",
+
       active: !plan.active,
+
     };
+
 
     try {
 
@@ -177,15 +297,94 @@ function SubscriptionPlans() {
         error.response?.data ||
         "Unable to update plan"
       );
+
     }
   }
 
+
+  // ==============================
+  // DEACTIVATE MEMBER SUBSCRIPTION
+  // ==============================
+
+  async function handleDeactivateSubscription(
+    subscriptionId
+  ) {
+
+    const confirmed = window.confirm(
+      "Are you sure you want to deactivate this member's subscription?"
+    );
+
+
+    if (!confirmed) {
+
+      return;
+
+    }
+
+
+    try {
+
+      await deactivateSubscription(subscriptionId);
+
+      alert(
+        "Subscription deactivated successfully"
+      );
+
+      await loadSubscriptions();
+
+    } catch (error) {
+
+      console.error(
+        "Unable to deactivate subscription",
+        error
+      );
+
+      alert(
+        error.response?.data?.message ||
+        error.response?.data ||
+        "Unable to deactivate subscription"
+      );
+
+    }
+  }
+
+
+  // ==============================
+  // SHOW SUBSCRIBED MEMBERS
+  // ==============================
+
+  function openSubscribedMembers() {
+
+    setShowSubscribedMembers(true);
+
+    setShowForm(false);
+
+    loadSubscriptions();
+
+  }
+
+
+  // ==============================
+  // BACK TO PLANS
+  // ==============================
+
+  function backToPlans() {
+
+    setShowSubscribedMembers(false);
+
+  }
+
+
   return (
+
     <Layout>
 
       <div className="subscription-plans-page">
 
-        {/* Header */}
+
+        {/* ================================= */}
+        {/* HEADER */}
+        {/* ================================= */}
 
         <div className="subscription-header d-flex justify-content-between align-items-center mb-4">
 
@@ -201,23 +400,58 @@ function SubscriptionPlans() {
 
           </div>
 
-          <button
-            className="btn btn-primary"
-            onClick={openAddForm}
-          >
-            + Add Plan
-          </button>
+
+          <div className="d-flex gap-2">
+
+
+            {!showSubscribedMembers && (
+
+              <button
+                className="btn btn-primary"
+                onClick={openAddForm}
+              >
+                + Add Plan
+              </button>
+
+            )}
+
+
+            {!showSubscribedMembers ? (
+
+              <button
+                className="btn btn-outline-primary"
+                onClick={openSubscribedMembers}
+              >
+                Subscribed Members
+              </button>
+
+            ) : (
+
+              <button
+                className="btn btn-secondary"
+                onClick={backToPlans}
+              >
+                ← Back to Plans
+              </button>
+
+            )}
+
+          </div>
 
         </div>
 
 
-        {/* Add / Edit Form */}
 
-        {showForm && (
+        {/* ================================= */}
+        {/* ADD / EDIT FORM */}
+        {/* ================================= */}
+
+        {!showSubscribedMembers && showForm && (
 
           <div className="card subscription-form-card mb-4">
 
             <div className="card-body">
+
 
               <h4 className="mb-4">
 
@@ -228,7 +462,11 @@ function SubscriptionPlans() {
               </h4>
 
 
+
               <div className="subscription-form-grid">
+
+
+                {/* PLAN NAME */}
 
                 <div>
 
@@ -248,6 +486,9 @@ function SubscriptionPlans() {
 
                 </div>
 
+
+
+                {/* DURATION */}
 
                 <div>
 
@@ -269,6 +510,9 @@ function SubscriptionPlans() {
                 </div>
 
 
+
+                {/* PRICE */}
+
                 <div>
 
                   <label className="form-label">
@@ -288,6 +532,9 @@ function SubscriptionPlans() {
 
                 </div>
 
+
+
+                {/* DESCRIPTION */}
 
                 <div>
 
@@ -310,6 +557,9 @@ function SubscriptionPlans() {
               </div>
 
 
+
+              {/* FORM BUTTONS */}
+
               <div className="mt-4">
 
                 <button
@@ -320,6 +570,7 @@ function SubscriptionPlans() {
                     ? "Update Plan"
                     : "Save Plan"}
                 </button>
+
 
                 <button
                   className="btn btn-secondary"
@@ -337,130 +588,390 @@ function SubscriptionPlans() {
         )}
 
 
-        {/* Plans */}
 
-        <div className="subscription-plan-grid">
+        {/* ================================= */}
+        {/* SUBSCRIPTION PLANS */}
+        {/* ================================= */}
 
-          {plans.map((plan) => (
+        {!showSubscribedMembers && (
 
-            <div
-              className={`subscription-plan-card ${
-                !plan.active
-                  ? "inactive-plan"
-                  : ""
-              }`}
-              key={plan.id}
-            >
+          <>
 
-              <div className="plan-card-header">
+            <div className="subscription-plan-grid">
+
+              {plans.map((plan) => (
+
+                <div
+                  className={`subscription-plan-card ${
+                    !plan.active
+                      ? "inactive-plan"
+                      : ""
+                  }`}
+                  key={plan.id}
+                >
+
+
+                  {/* PLAN HEADER */}
+
+                  <div className="plan-card-header">
+
+                    <div>
+
+                      <h3>
+                        {plan.name}
+                      </h3>
+
+
+                      <span
+                        className={
+                          plan.active
+                            ? "plan-status active"
+                            : "plan-status inactive"
+                        }
+                      >
+                        {plan.active
+                          ? "Active"
+                          : "Inactive"}
+                      </span>
+
+                    </div>
+
+                  </div>
+
+
+
+                  {/* PRICE */}
+
+                  <div className="plan-price">
+
+                    ₹
+                    {Number(plan.price).toLocaleString(
+                      "en-IN"
+                    )}
+
+                  </div>
+
+
+
+                  {/* DURATION */}
+
+                  <div className="plan-duration">
+
+                    {plan.durationDays} days
+
+                  </div>
+
+
+
+                  {/* DESCRIPTION */}
+
+                  <p className="plan-description">
+
+                    {plan.description ||
+                      "No description available."}
+
+                  </p>
+
+
+
+                  {/* ACTIONS */}
+
+                  <div className="plan-actions">
+
+
+                    <button
+                      className="btn btn-warning btn-sm"
+                      onClick={() =>
+                        openEditForm(plan)
+                      }
+                    >
+                      Edit
+                    </button>
+
+
+
+                    <button
+                      className={`btn btn-sm ${
+                        plan.active
+                          ? "btn-secondary"
+                          : "btn-success"
+                      }`}
+                      onClick={() =>
+                        handleDeactivate(plan)
+                      }
+                    >
+                      {plan.active
+                        ? "Deactivate"
+                        : "Activate"}
+                    </button>
+
+
+
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() =>
+                        handleDelete(plan.id)
+                      }
+                    >
+                      Delete
+                    </button>
+
+                  </div>
+
+                </div>
+
+              ))}
+
+            </div>
+
+
+
+            {/* NO PLANS */}
+
+            {plans.length === 0 && (
+
+              <div className="empty-plans">
+
+                <h4>
+                  No subscription plans
+                </h4>
+
+                <p>
+                  Add your first gym membership plan.
+                </p>
+
+
+                <button
+                  className="btn btn-primary"
+                  onClick={openAddForm}
+                >
+                  + Add Plan
+                </button>
+
+              </div>
+
+            )}
+
+          </>
+
+        )}
+
+
+
+        {/* ================================= */}
+        {/* SUBSCRIBED MEMBERS */}
+        {/* ================================= */}
+
+        {showSubscribedMembers && (
+
+          <div className="card mt-4">
+
+            <div className="card-body">
+
+
+              <div className="d-flex justify-content-between align-items-center mb-4">
 
                 <div>
 
-                  <h3>
-                    {plan.name}
-                  </h3>
+                  <h2 className="mb-1">
+                    Subscribed Members
+                  </h2>
 
-                  <span
-                    className={
-                      plan.active
-                        ? "plan-status active"
-                        : "plan-status inactive"
-                    }
-                  >
-                    {plan.active
-                      ? "Active"
-                      : "Inactive"}
-                  </span>
+                  <p className="text-muted mb-0">
+                    View and manage members who have subscribed to a plan.
+                  </p>
 
                 </div>
 
               </div>
 
 
-              <div className="plan-price">
 
-                ₹{Number(plan.price).toLocaleString("en-IN")}
+              {/* LOADING */}
 
-              </div>
+              {loadingSubscriptions && (
 
+                <p>
+                  Loading subscribed members...
+                </p>
 
-              <div className="plan-duration">
-
-                {plan.durationDays} days
-
-              </div>
+              )}
 
 
-              <p className="plan-description">
 
-                {plan.description ||
-                  "No description available."}
+              {/* NO MEMBERS */}
 
-              </p>
+              {!loadingSubscriptions &&
+                subscriptions.length === 0 && (
 
+                  <p>
+                    No subscribed members found.
+                  </p>
 
-              <div className="plan-actions">
-
-                <button
-                  className="btn btn-warning btn-sm"
-                  onClick={() =>
-                    openEditForm(plan)
-                  }
-                >
-                  Edit
-                </button>
+                )}
 
 
-                <button
-                  className={`btn btn-sm ${
-                    plan.active
-                      ? "btn-secondary"
-                      : "btn-success"
-                  }`}
-                  onClick={() =>
-                    handleDeactivate(plan)
-                  }
-                >
-                  {plan.active
-                    ? "Deactivate"
-                    : "Activate"}
-                </button>
+
+              {/* MEMBERS TABLE */}
+
+              {!loadingSubscriptions &&
+                subscriptions.length > 0 && (
+
+                  <div className="table-responsive">
+
+                    <table className="table table-hover">
+
+                      <thead>
+
+                        <tr>
+
+                          <th>
+                            Member
+                          </th>
+
+                          <th>
+                            Plan
+                          </th>
+
+                          <th>
+                            Start Date
+                          </th>
+
+                          <th>
+                            Expiry Date
+                          </th>
+
+                          <th>
+                            Status
+                          </th>
+
+                          <th>
+                            Action
+                          </th>
+
+                        </tr>
+
+                      </thead>
 
 
-                <button
-                  className="btn btn-danger btn-sm"
-                  onClick={() =>
-                    handleDelete(plan.id)
-                  }
-                >
-                  Delete
-                </button>
 
-              </div>
+                      <tbody>
+
+                        {subscriptions.map(
+                          (subscription) => (
+
+                            <tr
+                              key={subscription.id}
+                            >
+
+
+                              {/* MEMBER */}
+
+                              <td>
+
+                                {subscription.member?.name ||
+                                  "Unknown"}
+
+                              </td>
+
+
+
+                              {/* PLAN */}
+
+                              <td>
+
+                                {subscription.plan?.name ||
+                                  "Unknown"}
+
+                              </td>
+
+
+
+                              {/* START DATE */}
+
+                              <td>
+
+                                {subscription.startDate}
+
+                              </td>
+
+
+
+                              {/* EXPIRY DATE */}
+
+                              <td>
+
+                                {subscription.expiryDate}
+
+                              </td>
+
+
+
+                              {/* STATUS */}
+
+                              <td>
+
+                                <span
+                                  className={
+                                    subscription.status ===
+                                    "ACTIVE"
+                                      ? "badge bg-success"
+                                      : "badge bg-secondary"
+                                  }
+                                >
+                                  {subscription.status}
+                                </span>
+
+                              </td>
+
+
+
+                              {/* ACTION */}
+
+                              <td>
+
+                                {subscription.status ===
+                                  "ACTIVE" && (
+
+                                  <button
+                                    className="btn btn-danger btn-sm"
+                                    onClick={() =>
+                                      handleDeactivateSubscription(
+                                        subscription.id
+                                      )
+                                    }
+                                  >
+                                    Deactivate
+                                  </button>
+
+                                )}
+
+
+                                {subscription.status !==
+                                  "ACTIVE" && (
+
+                                  <span className="text-muted">
+                                    —
+                                  </span>
+
+                                )}
+
+                              </td>
+
+                            </tr>
+
+                          )
+                        )}
+
+                      </tbody>
+
+                    </table>
+
+                  </div>
+
+                )}
 
             </div>
-
-          ))}
-
-        </div>
-
-
-        {plans.length === 0 && (
-
-          <div className="empty-plans">
-
-            <h4>No subscription plans</h4>
-
-            <p>
-              Add your first gym membership plan.
-            </p>
-
-            <button
-              className="btn btn-primary"
-              onClick={openAddForm}
-            >
-              + Add Plan
-            </button>
 
           </div>
 
@@ -469,7 +980,9 @@ function SubscriptionPlans() {
       </div>
 
     </Layout>
+
   );
+
 }
 
 export default SubscriptionPlans;

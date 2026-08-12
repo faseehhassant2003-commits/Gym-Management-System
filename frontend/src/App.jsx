@@ -108,15 +108,15 @@ function App() {
         </ProtectedRoute>
     }
 />
- <Route
-    path="/workoutplans"
-    element={
-        <ProtectedRoute>
-          <RoleProtectedRoute allowedRoles={["ADMIN", "TRAINER"]}>
-            <WorkoutPlans />
-          </RoleProtectedRoute>
-        </ProtectedRoute>
-    }
+<Route
+  path="/workoutplans"
+  element={
+    <RoleProtectedRoute
+      allowedRoles={["ADMIN", "TRAINER", "MEMBER"]}
+    >
+      <WorkoutPlans />
+    </RoleProtectedRoute>
+  }
 />
 
 

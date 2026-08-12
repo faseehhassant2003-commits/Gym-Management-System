@@ -13,5 +13,8 @@ public class CompleteRegistrationRequest {
 
     private String password;
 
+    private double height;
+    private double weight;
+
     private String otp;
 }

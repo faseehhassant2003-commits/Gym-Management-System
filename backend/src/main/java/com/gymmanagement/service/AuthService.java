@@ -81,6 +81,8 @@ public class AuthService {
         member.setAge(18);              // temporary default
         member.setMembership("Basic");  // temporary default
         member.setQrToken(UUID.randomUUID().toString());
+        member.setHeight(request.getHeight());
+        member.setWeight(request.getWeight());
 
         member.setUser(user);
 
@@ -187,6 +189,9 @@ public class AuthService {
         member.setMembership("Basic");
 
         member.setQrToken(UUID.randomUUID().toString());
+
+        member.setHeight(request.getHeight());
+        member.setWeight(request.getWeight());
 
         member.setUser(user);
 

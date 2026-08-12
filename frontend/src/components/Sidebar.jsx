@@ -82,9 +82,9 @@ function Sidebar() {
               </Link>
             </li>
             
-  <li>
-  <Link to="/subscription-plans">
-    <span>💳</span>
+  <li className="nav-item mb-2">
+  <Link to="/subscription-plans" className="nav-link text-white">
+  <i className="bi bi-credit-card me-2"></i>
     Subscription Plans
   </Link>
 </li>
@@ -112,7 +112,7 @@ function Sidebar() {
         {role === "MEMBER" && (
           <>
             <li className="nav-item mb-2">
-              <Link to="/my-workout" className="nav-link text-white">
+              <Link to="/workoutplans" className="nav-link text-white">
                 <i className="bi bi-activity me-2"></i>
                 My Workout
               </Link>
@@ -127,7 +127,7 @@ function Sidebar() {
 </li>
 
             <li className="nav-item mb-2">
-              <Link to="/my-diet" className="nav-link text-white">
+              <Link to="/diet" className="nav-link text-white">
                 <i className="bi bi-heart-pulse me-2"></i>
                 My Diet
               </Link>

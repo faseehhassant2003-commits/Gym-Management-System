@@ -16,3 +16,15 @@ export const subscribeToPlan = (memberId, planId) => {
     `/api/member-subscriptions/subscribe?memberId=${memberId}&planId=${planId}`
   );
 };
+
+// Admin - Get all member subscriptions
+export const getAllSubscriptions = () => {
+  return api.get("/api/member-subscriptions/admin/all");
+};
+
+// Admin - Deactivate a member subscription
+export const deactivateSubscription = (subscriptionId) => {
+  return api.put(
+    `/api/member-subscriptions/admin/${subscriptionId}/deactivate`
+  );
+};

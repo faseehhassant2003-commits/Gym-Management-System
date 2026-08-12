@@ -96,4 +96,22 @@ public class MemberSubscriptionService {
                 .findByMemberIdAndStatus(memberId, "ACTIVE")
                 .orElse(null);
     }
+
+//find all sub list
+    public List<MemberSubscription>getAllSubsciptions(){
+
+        return subscriptionRepository.findAll();
+    }
+    public MemberSubscription deactivateSubscription(
+            Long subscribedId
+    ){
+        MemberSubscription subscription=subscriptionRepository.findById(subscribedId)
+                .orElseThrow(()->
+                        new RuntimeException("Subscription not found"));
+        subscription.setStatus("INACTIVE");
+        return subscriptionRepository.save(subscription);
+    }
+
+
+
 }

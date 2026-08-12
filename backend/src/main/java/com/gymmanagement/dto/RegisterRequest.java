@@ -13,4 +13,7 @@ public class RegisterRequest {
 
     private String password;
 
+    private double height;
+    private double weight;
+
 }

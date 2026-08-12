@@ -51,4 +51,14 @@ public class MemberSubscriptionController {
 
         return ResponseEntity.ok(subscription);
     }
+    @GetMapping("/admin/all")
+    public ResponseEntity<List<MemberSubscription>>getAllSubscription(){
+        return ResponseEntity.ok(service.getAllSubsciptions());
+
+    }
+
+    @PutMapping("/admin/{subscriptionId}/deactivate")
+    public ResponseEntity<MemberSubscription>deactivateSubsciption(@PathVariable Long subscriptionId){
+        return ResponseEntity.ok(service.deactivateSubscription(subscriptionId));
+    }
 }
