@@ -5,7 +5,6 @@ import com.gymmanagement.enums.Role;
 import com.gymmanagement.entity.User;
 import com.gymmanagement.dto.MemberRequest;
 import com.gymmanagement.repository.UserRepository;
-import org.springframework.dao.DataIntegrityViolationException;
 import com.gymmanagement.dto.MemberProfileResponse;
 import com.gymmanagement.entity.Member;
 import com.gymmanagement.repository.MemberRepository;
@@ -15,6 +14,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.gymmanagement.repository.AttendanceRepository;
+import com.gymmanagement.repository.MemberSubscriptionRepository;
+import com.gymmanagement.repository.PaymentRepository;
+
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +26,14 @@ import java.util.UUID;
 
 @Service
 public class MemberService {
+    @Autowired
+    private AttendanceRepository attendanceRepository;
 
+    @Autowired
+    private MemberSubscriptionRepository memberSubscriptionRepository;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
     @Autowired
     private MemberRepository memberRepository;
 
@@ -80,22 +91,25 @@ public class MemberService {
 
         return memberRepository.save(member);
     }
+    @Transactional
     public void deleteMember(Long id) {
 
-        try {
-
-            memberRepository.deleteById(id);
-
-        } catch (DataIntegrityViolationException e) {
-
-            throw new RuntimeException(
-                    "Cannot delete member because attendance records exist."
-            );
-
+        if (!memberRepository.existsById(id)) {
+            throw new RuntimeException("Member not found");
         }
 
-    }
+        // 1. Delete attendance records
+        attendanceRepository.deleteByMemberId(id);
 
+        // 2. Delete subscription records
+        memberSubscriptionRepository.deleteByMemberId(id);
+
+        // 3. Delete payment records
+        paymentRepository.deleteByMemberId(id);
+
+        // 4. Finally delete the member
+        memberRepository.deleteById(id);
+    }
     public MemberProfileResponse getCurrentMemberProfile() {
         Member member = getAuthenticatedMember();
         return mapToProfileResponse(member);

@@ -5,10 +5,13 @@ import {
   getActiveSubscriptionPlans,
 } from "../api/SubscriptionPlanApi";
 
+ import { getActiveSubscription } from "../api/MemberSubscriptionApi";
+
+
 import {
-  getActiveSubscription,
-  subscribeToPlan,
-} from "../api/MemberSubscriptionApi";
+  createPaymentOrder,
+  verifyPayment,
+} from "../api/PaymentApi";
 
 import { getMemberProfile } from "../api/memberApi";
 
@@ -75,58 +78,222 @@ function Subscription() {
     }
   }
 
+async function handleSubscribe(plan) {
 
-  async function handleSubscribe(planId) {
+  if (!profile) {
+    return;
+  }
 
-    if (!profile) {
-      return;
-    }
+  if (activeSubscription) {
+    alert(
+      "You already have an active subscription."
+    );
+    return;
+  }
 
-    if (activeSubscription) {
-      alert(
-        "You already have an active subscription."
+  const confirmed = window.confirm(
+    `Are you sure you want to subscribe to ${plan.name} for ₹${Number(plan.price).toLocaleString("en-IN")}?`
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+
+    setSubscribing(true);
+
+    // ==========================================
+    // STEP 1: CREATE RAZORPAY ORDER
+    // ==========================================
+
+    const orderResponse =
+      await createPaymentOrder(
+        profile.id,
+        plan.id
       );
-      return;
-    }
 
-    const confirmed = window.confirm(
-      "Are you sure you want to subscribe to this plan?"
+    const order = orderResponse.data;
+
+    console.log(
+      "Razorpay order:",
+      order
     );
 
-    if (!confirmed) {
-      return;
-    }
 
-    try {
+    // ==========================================
+    // STEP 2: OPEN RAZORPAY CHECKOUT
+    // ==========================================
 
-      setSubscribing(true);
+    const options = {
 
-      await subscribeToPlan(
-        profile.id,
-        planId
-      );
+      key: order.keyId,
+
+      amount: order.amount,
+
+      currency: order.currency,
+
+      name: "Gym Management System",
+
+      description:
+        `${plan.name} Membership`,
+
+      order_id:
+        order.orderId,
+
+      prefill: {
+
+        name: profile.name,
+
+        email: profile.username,
+
+        contact: profile.phone,
+
+      },
+
+      theme: {
+
+        color: "#0d6efd",
+
+      },
+
+
+      // ========================================
+      // STEP 3: PAYMENT SUCCESS
+      // ========================================
+
+      handler: async function (response) {
+
+        console.log(
+          "Razorpay response:",
+          response
+        );
+
+        try {
+
+          // ======================================
+          // STEP 4: VERIFY PAYMENT
+          // ======================================
+
+          const verificationResponse =
+            await verifyPayment({
+
+              memberId: profile.id,
+
+              planId: plan.id,
+
+              razorpayOrderId:
+                response.razorpay_order_id,
+
+              razorpayPaymentId:
+                response.razorpay_payment_id,
+
+              razorpaySignature:
+                response.razorpay_signature,
+
+            });
+
+
+          console.log(
+            "Payment verification:",
+            verificationResponse.data
+          );
+
+
+          // ======================================
+          // STEP 5: SUCCESS
+          // ======================================
+
+          alert(
+            "Payment successful! Your subscription is now active."
+          );
+
+          await loadSubscriptionData();
+
+        } catch (error) {
+
+          console.error(
+            "Payment verification failed:",
+            error
+          );
+
+          alert(
+            error.response?.data?.message ||
+            error.response?.data ||
+            "Payment verification failed."
+          );
+
+        } finally {
+
+          setSubscribing(false);
+
+        }
+
+      },
+
+
+      // ========================================
+      // PAYMENT FAILED
+      // ========================================
+
+      modal: {
+
+        ondismiss: function () {
+
+          console.log(
+            "Razorpay checkout closed"
+          );
+
+          setSubscribing(false);
+
+        },
+
+      },
+
+    };
+
+
+    // ==========================================
+    // STEP 6: CREATE RAZORPAY CHECKOUT
+    // ==========================================
+
+    if (!window.Razorpay) {
 
       alert(
-        "Subscription activated successfully!"
+        "Razorpay Checkout is not loaded."
       );
-
-      // Reload subscription information
-      await loadSubscriptionData();
-
-    } catch (error) {
-
-      alert(
-        error.response?.data?.message ||
-        error.response?.data ||
-        "Unable to subscribe to this plan."
-      );
-
-    } finally {
 
       setSubscribing(false);
 
+      return;
+
     }
+
+
+    const razorpay =
+      new window.Razorpay(options);
+
+
+    razorpay.open();
+
+
+  } catch (error) {
+
+    console.error(
+      "Unable to create payment:",
+      error
+    );
+
+    alert(
+      error.response?.data?.message ||
+      error.response?.data ||
+      "Unable to create payment order."
+    );
+
+    setSubscribing(false);
+
   }
+}
 
 
   function formatDate(date) {
@@ -283,8 +450,8 @@ function Subscription() {
                       subscribing
                     }
                     onClick={() =>
-                      handleSubscribe(plan.id)
-                    }
+                        handleSubscribe(plan)
+                      }
                   >
 
                     {activeSubscription

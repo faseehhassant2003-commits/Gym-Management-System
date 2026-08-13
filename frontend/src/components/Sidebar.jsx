@@ -75,12 +75,7 @@ function Sidebar() {
               </Link>
             </li>
 
-            <li className="nav-item mb-2">
-              <Link to="/payments" className="nav-link text-white">
-                <i className="bi bi-cash-stack me-2"></i>
-                Payments
-              </Link>
-            </li>
+         
             
   <li className="nav-item mb-2">
   <Link to="/subscription-plans" className="nav-link text-white">

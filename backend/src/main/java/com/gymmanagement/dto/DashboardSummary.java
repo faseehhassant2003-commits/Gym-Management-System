@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 public class DashboardSummary {
     public long totalMembers;
     public long totalTrainers;
-    public double totalRevenue;
     private long totalAttendance;
 
 }

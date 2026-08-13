@@ -15,6 +15,8 @@ public interface MemberSubscriptionRepository
             Long memberId,
             String status
     );
+
     List<MemberSubscription> findByStatus(String status);
 
+    void deleteByMemberId(Long memberId);
 }

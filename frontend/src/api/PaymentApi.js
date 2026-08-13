@@ -1,10 +1,27 @@
 import api from "./api";
 
-export const getPayments=()=>
-    api.get("/payments");
-export const addPayment=(payment)=>
-    api.post("/payments",payment);
-export const updatePayment=(id,payment)=>
-    api.put(`/payments/${id}`, payment);
-export const deletePayment=(id)=>
- api.delete(`/payments/${id}`);
+const API_URL = "/api/payments";
+
+export const createPaymentOrder = (memberId, planId) => {
+    return api.post(
+        `${API_URL}/create-order`,
+        null,
+        {
+            params: {
+                memberId,
+                planId,
+            },
+        }
+    );
+};
+
+export const verifyPayment = (paymentData) => {
+    return api.post(
+        `${API_URL}/verify`,
+        paymentData
+    );
+};
+
+export const getMyPayments = () => {
+    return api.get(`${API_URL}/my`);
+};

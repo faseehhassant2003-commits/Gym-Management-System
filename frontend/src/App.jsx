@@ -2,10 +2,10 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ManageUsers from "./pages/ManageUsers";
 import WorkoutPlans from "./pages/WorkoutPlans";
 import Login from "./pages/Login";
+import MyPayments from "./pages/MyPayments";
 import Members from "./pages/Members";
 import Trainers from "./pages/Trainers";
 import Attendance from "./pages/Attendance";
-import Payments from "./pages/Payments";
 import SubscriptionPlans from "./pages/SubscriptionPlans";
 import DietPlans from "./pages/DietPlans";
 import Register from "./pages/Register";
@@ -52,6 +52,19 @@ function App() {
     </ProtectedRoute>
   }
 />
+
+<Route
+    path="/my-payments"
+    element={
+        <ProtectedRoute>
+            <RoleProtectedRoute allowedRoles={["MEMBER"]}>
+                <MyPayments />
+            </RoleProtectedRoute>
+        </ProtectedRoute>
+    }
+/>
+
+
 <Route
   path="/subscription-plans"
   element={
@@ -130,18 +143,17 @@ function App() {
     </ProtectedRoute>
   }
 />
-
-
-       <Route
-    path="/payments"
+<Route
+    path="*"
     element={
-        <ProtectedRoute>
-          <RoleProtectedRoute allowedRoles={["ADMIN"]}>
-            <Payments />
-          </RoleProtectedRoute>
-        </ProtectedRoute>
+        <div style={{ padding: "50px" }}>
+            <h1>ROUTER IS WORKING</h1>
+            <p>Current URL: {window.location.pathname}</p>
+        </div>
     }
 />
+
+    
  </Routes>
 </BrowserRouter>
   );

@@ -7,7 +7,6 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import DashboardCard from "../components/DashboardCard";
 import RecentMembers from "../components/RecentMembers";
-import RecentPayments from "../components/RecentPayments";
 
 function Dashboard() {
   const [name] = useState("Faseeh");
@@ -68,15 +67,6 @@ useEffect(() => {
             </div>
 
             <div className="col-md-6 mb-3">
-           <DashboardCard
-  title="Revenue"
-  value={`₹${summary.totalRevenue}`}
-  icon="bi-cash-stack"
-  color="bg-warning"
-/>
-            </div>
-
-            <div className="col-md-6 mb-3">
             <DashboardCard
   title="Attendance"
   value={summary.totalAttendance}
@@ -89,7 +79,7 @@ useEffect(() => {
           <RecentMembers />
        
 
-<RecentPayments />
+
 <MemberChart/>
         </div>
 
@@ -99,4 +89,4 @@ useEffect(() => {
   );
 }
 
-export default Dashboard;
+export default Dashboard ;

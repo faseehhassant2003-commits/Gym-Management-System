@@ -14,7 +14,6 @@ api.interceptors.request.use(
 
         const token = localStorage.getItem("token");
 
-        // Do NOT attach JWT to authentication/registration endpoints
         const publicEndpoints = [
             "/auth/login",
             "/auth/send-otp",
