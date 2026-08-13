@@ -17,6 +17,9 @@ import Layout from "./layouts/Layout";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import RoleProtectedRoute from "./components/RoleProtectedRoute";
 import Home from "./pages/Home";
+import MemberHome from "./pages/MemberHome";
+
+
 function App() {
   return (
 <BrowserRouter>
@@ -52,7 +55,18 @@ function App() {
     </ProtectedRoute>
   }
 />
-
+<Route
+  path="/home"
+  element={
+    <ProtectedRoute>
+      <RoleProtectedRoute allowedRoles={["MEMBER"]}>
+        <Layout>
+          <MemberHome />
+        </Layout>
+      </RoleProtectedRoute>
+    </ProtectedRoute>
+  }
+/>
 <Route
     path="/my-payments"
     element={

@@ -21,14 +21,15 @@ function Sidebar() {
           </li>
         )}
 
-        {/* Dashboard (Everyone) */}
-        <li className="nav-item mb-2">
-          <Link to="/dashboard" className="nav-link text-white">
-            <i className="bi bi-speedometer2 me-2"></i>
-            Dashboard
-          </Link>
-        </li>
-
+    {/* Dashboard - ADMIN & TRAINER */}
+{(role === "ADMIN" || role === "TRAINER") && (
+  <li className="nav-item mb-2">
+    <Link to="/dashboard" className="nav-link text-white">
+      <i className="bi bi-speedometer2 me-2"></i>
+      Dashboard
+    </Link>
+  </li>
+)}
 
 
  
@@ -112,6 +113,12 @@ function Sidebar() {
                 My Workout
               </Link>
             </li>
+            <li className="nav-item mb-2">
+  <Link to="/home" className="nav-link text-white">
+    <i className="bi bi-house-fill me-2"></i>
+    Home
+  </Link>
+</li>
 
             
      <li className="nav-item mb-2">

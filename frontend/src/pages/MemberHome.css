@@ -1,0 +1,356 @@
+.member-home {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.member-welcome {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+  margin-bottom: 25px;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+}
+
+.member-welcome-small {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #777;
+}
+
+.member-welcome h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.member-quote {
+  margin: 10px 0 0;
+  color: #777;
+  font-size: 15px;
+}
+
+.welcome-icon {
+  font-size: 55px;
+}
+
+
+/* Summary Cards */
+
+.member-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+.member-summary-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 22px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+}
+
+.summary-icon {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  font-size: 24px;
+}
+
+.workout-icon {
+  background: #f1f3ff;
+}
+
+.attendance-icon {
+  background: #fff2e8;
+}
+
+.membership-icon {
+  background: #eaf7ff;
+}
+
+.progress-icon {
+  background: #eef9ed;
+}
+
+.member-summary-card p {
+  margin: 0 0 5px;
+  color: #777;
+  font-size: 13px;
+}
+
+.member-summary-card h3 {
+  margin: 0 0 4px;
+  font-size: 18px;
+}
+
+.member-summary-card span {
+  color: #999;
+  font-size: 12px;
+}
+
+
+/* Main Cards */
+
+.member-main-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 22px;
+  margin-bottom: 30px;
+}
+
+.member-card {
+  padding: 28px;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+}
+
+.member-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 22px;
+}
+
+.card-label {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #888;
+}
+
+.member-card h2 {
+  margin: 0;
+  font-size: 23px;
+}
+
+.card-icon {
+  font-size: 28px;
+}
+
+
+/* Exercises */
+
+.exercise-list {
+  margin-bottom: 20px;
+}
+
+.exercise-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.exercise-row div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.exercise-row strong {
+  font-size: 14px;
+}
+
+.exercise-row span {
+  color: #999;
+  font-size: 12px;
+}
+
+.exercise-row b {
+  font-size: 14px;
+}
+
+
+/* Buttons */
+
+.member-primary-button,
+.member-secondary-button {
+  width: 100%;
+  padding: 13px 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.member-primary-button {
+  background: #111111;
+  color: white;
+}
+
+.member-secondary-button {
+  background: #f2f2f2;
+  color: #222;
+}
+
+
+/* Membership */
+
+.active-badge {
+  padding: 6px 10px;
+  border-radius: 20px;
+  background: #e7f8ed;
+  color: #198754;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.membership-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.membership-details div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.membership-details span {
+  color: #999;
+  font-size: 12px;
+}
+
+.membership-details strong {
+  font-size: 14px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #eeeeee;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  width: 40%;
+  height: 100%;
+  background: #111111;
+  border-radius: 10px;
+}
+
+.membership-progress p {
+  margin: 8px 0 20px;
+  color: #888;
+  font-size: 12px;
+}
+
+
+/* Quick Actions */
+
+.quick-actions-section {
+  margin-bottom: 30px;
+}
+
+.section-heading {
+  margin-bottom: 15px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.quick-action {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  border: none;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  text-align: left;
+}
+
+.quick-action > span {
+  font-size: 25px;
+}
+
+.quick-action div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.quick-action strong {
+  font-size: 14px;
+}
+
+.quick-action small {
+  color: #999;
+  font-size: 11px;
+}
+
+
+/* Responsive */
+
+@media (max-width: 1100px) {
+  .member-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .quick-actions-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 800px) {
+  .member-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .member-welcome {
+    padding: 22px;
+  }
+
+  .member-welcome h1 {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .member-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-actions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .welcome-icon {
+    display: none;
+  }
+}
