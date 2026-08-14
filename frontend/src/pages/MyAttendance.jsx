@@ -14,16 +14,16 @@ function MyAttendance() {
         try {
             const token = localStorage.getItem("token");
 
-            const response = await fetch(
-                "http://localhost:8080/attendance/my",
-                {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
+          const response = await fetch(
+    `${import.meta.env.VITE_API_URL}/attendance/my`,
+    {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+    }
+);
 
             if (!response.ok) {
                 throw new Error("Failed to fetch attendance");
