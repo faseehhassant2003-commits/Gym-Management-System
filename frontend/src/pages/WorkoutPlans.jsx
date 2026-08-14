@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Layout from "../layouts/Layout";
-import { generateWorkout } from "../api/WorkoutApi";
+import { generateWorkout,getMyWorkout } from "../api/WorkoutApi";
 import ReactMarkdown from "react-markdown";
+import jsPDF from "jspdf";
 
 function WorkoutPlans() {
     const [age, setAge] = useState("");
@@ -15,6 +16,40 @@ function WorkoutPlans() {
 
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState("");
+
+    const [workout, setWorkout] = useState(null);
+
+    useEffect(() => {
+    loadMyWorkout();
+}, []);
+
+async function loadMyWorkout() {
+    try {
+
+        const response = await getMyWorkout();
+
+if (response.data) {
+    setWorkout(response.data);
+    setResult(response.data.workoutContent);
+
+    setAge(response.data.age || "");
+    setHeight(response.data.height || "");
+    setWeight(response.data.weight || "");
+    setGender(response.data.gender || "Male");
+    setGoal(response.data.goal || "Muscle Gain");
+    setExperience(response.data.experience || "Beginner");
+    setWorkoutDays(response.data.workoutDays || 5);
+    setEquipment(response.data.equipment || "Gym");
+}
+    } catch (error) {
+
+        console.error(
+            "Failed to load saved workout:",
+            error
+        );
+
+    }
+}
 
     async function handleGenerateWorkout() {
 
@@ -40,6 +75,12 @@ function WorkoutPlans() {
 
             setResult(response.data);
 
+const savedWorkoutResponse = await getMyWorkout();
+
+if (savedWorkoutResponse.data) {
+    setWorkout(savedWorkoutResponse.data);
+}
+
         } catch (error) {
 
             console.error(error);
@@ -51,6 +92,85 @@ function WorkoutPlans() {
 
         }
     }
+    function downloadWorkoutPDF() {
+
+    if (!result) {
+        alert("No workout plan available.");
+        return;
+    }
+
+    const doc = new jsPDF();
+
+    const margin = 15;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const maxWidth = pageWidth - margin * 2;
+
+    let y = 20;
+
+    // Title
+    doc.setFontSize(20);
+    doc.text("AI Workout Plan", margin, y);
+
+    y += 15;
+
+    // Workout information
+    doc.setFontSize(11);
+
+    if (workout) {
+
+        doc.text(`Goal: ${workout.goal || "-"}`, margin, y);
+        y += 7;
+
+        doc.text(
+            `Experience: ${workout.experience || "-"}`,
+            margin,
+            y
+        );
+        y += 7;
+
+        doc.text(
+            `Workout Days: ${workout.workoutDays || "-"}`,
+            margin,
+            y
+        );
+        y += 7;
+
+        doc.text(
+            `Equipment: ${workout.equipment || "-"}`,
+            margin,
+            y
+        );
+
+        y += 12;
+    }
+
+    // Workout content
+    doc.setFontSize(10);
+
+    const cleanText = result
+        .replace(/#{1,6}\s?/g, "")
+        .replace(/\*\*(.*?)\*\*/g, "$1")
+        .replace(/\*(.*?)\*/g, "$1")
+        .replace(/`(.*?)`/g, "$1");
+
+    const lines = doc.splitTextToSize(
+        cleanText,
+        maxWidth
+    );
+
+    lines.forEach((line) => {
+
+        if (y > 280) {
+            doc.addPage();
+            y = 20;
+        }
+
+        doc.text(line, margin, y);
+        y += 6;
+    });
+
+    doc.save("my-ai-workout-plan.pdf");
+}
 
     return (
         <Layout>
@@ -161,6 +281,18 @@ function WorkoutPlans() {
             </div>
 
             {result && (
+                  <>
+        <div className="d-flex justify-content-end mt-4">
+
+            <button
+                className="btn btn-outline-primary"
+                onClick={downloadWorkoutPDF}
+            >
+                <i className="bi bi-download me-2"></i>
+                Download Workout PDF
+            </button>
+
+        </div>
 
                 <div className="card mt-4 shadow-sm">
 
@@ -177,7 +309,7 @@ function WorkoutPlans() {
                     </div>
 
                 </div>
-
+</>
             )}
 
         </Layout>

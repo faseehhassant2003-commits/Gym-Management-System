@@ -18,159 +18,258 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import RoleProtectedRoute from "./components/RoleProtectedRoute";
 import Home from "./pages/Home";
 import MemberHome from "./pages/MemberHome";
-
+import MyAttendance from "./pages/MyAttendance";
 
 function App() {
-  return (
-<BrowserRouter>
-<Routes>
-  <Route path="/" element={<Home/>}/>
- <Route path="/login" element={<Login />} />
- <Route path="/register" element={<Register />} />
- <Route
-    path="/dashboard"
-    element={
-        <ProtectedRoute>
-            <Dashboard />
-        </ProtectedRoute>
-    }
-/>
-<Route
-  path="/subscription"
-  element={
-    <ProtectedRoute>
-      <RoleProtectedRoute allowedRoles={["MEMBER"]}>
-        <Subscription />
-      </RoleProtectedRoute>
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/profile"
-  element={
-    <ProtectedRoute>
-      <Layout>
-        <Profile />
-      </Layout>
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/home"
-  element={
-    <ProtectedRoute>
-      <RoleProtectedRoute allowedRoles={["MEMBER"]}>
-        <Layout>
-          <MemberHome />
-        </Layout>
-      </RoleProtectedRoute>
-    </ProtectedRoute>
-  }
-/>
-<Route
-    path="/my-payments"
-    element={
-        <ProtectedRoute>
-            <RoleProtectedRoute allowedRoles={["MEMBER"]}>
-                <MyPayments />
-            </RoleProtectedRoute>
-        </ProtectedRoute>
-    }
-/>
+    return (
+        <BrowserRouter>
+            <Routes>
+
+                {/* Public Pages */}
+                <Route path="/" element={<Home />} />
+
+                <Route
+                    path="/login"
+                    element={<Login />}
+                />
+
+                <Route
+                    path="/register"
+                    element={<Register />}
+                />
 
 
-<Route
-  path="/subscription-plans"
-  element={
-    <ProtectedRoute>
-      <RoleProtectedRoute allowedRoles={["ADMIN"]}>
-        <SubscriptionPlans />
-      </RoleProtectedRoute>
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/qr-scanner"
-  element={
-    <ProtectedRoute>
-      <RoleProtectedRoute allowedRoles={["ADMIN", "TRAINER"]}>
-        <Layout>
-          <QRScanner />
-        </Layout>
-      </RoleProtectedRoute>
-    </ProtectedRoute>
-  }
-/>
+                {/* ================= ADMIN / TRAINER DASHBOARD ================= */}
 
-<Route
-    path="/members"
-    element={
-        <ProtectedRoute>
-          <RoleProtectedRoute allowedRoles={["ADMIN", "TRAINER"]}>
-            <Members />
-          </RoleProtectedRoute>
-        </ProtectedRoute>
-    }
-/>
-<Route
-    path="/trainers"
-    element={
-        <ProtectedRoute>
-            <Trainers />
-        </ProtectedRoute>
-    }
-/>     <Route
-    path="/attendance"
-    element={
-        <ProtectedRoute>
-            <Attendance />
-        </ProtectedRoute>
-    }
-/>
-      <Route
-    path="/diet"
-    element={
-        <ProtectedRoute>
-            <DietPlans />
-        </ProtectedRoute>
-    }
-/>
-<Route
-  path="/workoutplans"
-  element={
-    <RoleProtectedRoute
-      allowedRoles={["ADMIN", "TRAINER", "MEMBER"]}
-    >
-      <WorkoutPlans />
-    </RoleProtectedRoute>
-  }
-/>
+                <Route
+                    path="/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
 
 
-<Route
-  path="/users"
-  element={
-    <ProtectedRoute>
-      <RoleProtectedRoute allowedRoles={["ADMIN"]}>
-        <ManageUsers />
-      </RoleProtectedRoute>
-    </ProtectedRoute>
-  }
-/>
-<Route
-    path="*"
-    element={
-        <div style={{ padding: "50px" }}>
-            <h1>ROUTER IS WORKING</h1>
-            <p>Current URL: {window.location.pathname}</p>
-        </div>
-    }
-/>
+                {/* ================= MEMBER HOME ================= */}
 
-    
- </Routes>
-</BrowserRouter>
-  );
+                <Route
+                    path="/home"
+                    element={
+                        <ProtectedRoute>
+                            <RoleProtectedRoute allowedRoles={["MEMBER"]}>
+                                <Layout>
+                                    <MemberHome />
+                                </Layout>
+                            </RoleProtectedRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* ================= MEMBER PROFILE ================= */}
+
+                <Route
+                    path="/profile"
+                    element={
+                        <ProtectedRoute>
+                            <RoleProtectedRoute allowedRoles={["MEMBER"]}>
+                                <Layout>
+                                    <Profile />
+                                </Layout>
+                            </RoleProtectedRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* ================= MEMBER ATTENDANCE ================= */}
+
+                <Route
+                    path="/my-attendance"
+                    element={
+                        <ProtectedRoute>
+                            <RoleProtectedRoute allowedRoles={["MEMBER"]}>
+                                <Layout>
+                                    <MyAttendance />
+                                </Layout>
+                            </RoleProtectedRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* ================= MEMBER PAYMENTS ================= */}
+
+                <Route
+                    path="/my-payments"
+                    element={
+                        <ProtectedRoute>
+                            <RoleProtectedRoute allowedRoles={["MEMBER"]}>
+                                <MyPayments />
+                            </RoleProtectedRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* ================= MEMBER SUBSCRIPTION ================= */}
+
+                <Route
+                    path="/subscription"
+                    element={
+                        <ProtectedRoute>
+                            <RoleProtectedRoute allowedRoles={["MEMBER"]}>
+                                <Subscription />
+                            </RoleProtectedRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* ================= WORKOUT ================= */}
+
+                <Route
+                    path="/workoutplans"
+                    element={
+                        <ProtectedRoute>
+                            <RoleProtectedRoute
+                                allowedRoles={[
+                                    "ADMIN",
+                                    "TRAINER",
+                                    "MEMBER"
+                                ]}
+                            >
+                                <WorkoutPlans />
+                            </RoleProtectedRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* ================= ADMIN / TRAINER ================= */}
+
+                <Route
+                    path="/members"
+                    element={
+                        <ProtectedRoute>
+                            <RoleProtectedRoute
+                                allowedRoles={["ADMIN", "TRAINER"]}
+                            >
+                                <Members />
+                            </RoleProtectedRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                <Route
+                    path="/attendance"
+                    element={
+                        <ProtectedRoute>
+                            <RoleProtectedRoute
+                                allowedRoles={["ADMIN", "TRAINER"]}
+                            >
+                                <Attendance />
+                            </RoleProtectedRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                <Route
+                    path="/diet"
+                    element={
+                        <ProtectedRoute>
+                            <RoleProtectedRoute
+                                allowedRoles={[
+                                    "ADMIN",
+                                    "TRAINER",
+                                    "MEMBER"
+                                ]}
+                            >
+                                <DietPlans />
+                            </RoleProtectedRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                <Route
+                    path="/qr-scanner"
+                    element={
+                        <ProtectedRoute>
+                            <RoleProtectedRoute
+                                allowedRoles={["ADMIN", "TRAINER"]}
+                            >
+                                <Layout>
+                                    <QRScanner />
+                                </Layout>
+                            </RoleProtectedRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* ================= TRAINERS ================= */}
+
+                <Route
+                    path="/trainers"
+                    element={
+                        <ProtectedRoute>
+                            <RoleProtectedRoute
+                                allowedRoles={["ADMIN", "TRAINER"]}
+                            >
+                                <Trainers />
+                            </RoleProtectedRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* ================= ADMIN ONLY ================= */}
+
+                <Route
+                    path="/subscription-plans"
+                    element={
+                        <ProtectedRoute>
+                            <RoleProtectedRoute allowedRoles={["ADMIN"]}>
+                                <SubscriptionPlans />
+                            </RoleProtectedRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                <Route
+                    path="/users"
+                    element={
+                        <ProtectedRoute>
+                            <RoleProtectedRoute allowedRoles={["ADMIN"]}>
+                                <ManageUsers />
+                            </RoleProtectedRoute>
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* ================= 404 ================= */}
+
+                <Route
+                    path="*"
+                    element={
+                        <div style={{ padding: "50px" }}>
+                            <h1>Page Not Found</h1>
+                            <p>
+                                The page you are looking for does not exist.
+                            </p>
+                        </div>
+                    }
+                />
+
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;

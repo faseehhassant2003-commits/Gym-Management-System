@@ -9,12 +9,13 @@ function Layout({ children }) {
             <Sidebar />
 
             <div
-                style={{
-                    marginTop: "80px",
-                    marginLeft: "280px",
-                    padding: "30px",
-                   
-                }}
+            style={{
+        marginTop: "80px",
+        marginLeft: "280px",
+        padding: "30px",
+        minHeight: "calc(100vh - 80px)",
+        boxSizing: "border-box",
+    }}
             >
                 {children}
             </div>

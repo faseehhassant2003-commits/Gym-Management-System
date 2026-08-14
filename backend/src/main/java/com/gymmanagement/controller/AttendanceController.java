@@ -4,38 +4,50 @@ import com.gymmanagement.entity.Attendance;
 import com.gymmanagement.service.AttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-
 public class AttendanceController {
+
     @Autowired
     private AttendanceService attendanceService;
 
     @PreAuthorize("hasAnyRole('ADMIN','TRAINER')")
     @GetMapping("/attendance")
-    public List<Attendance> getAllAttendance(){
+    public List<Attendance> getAllAttendance() {
         return attendanceService.getAllAttendance();
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','TRAINER')")
-    @PostMapping ("/attendance")
-    public Attendance saveAttendance(@RequestBody Attendance attendance){
+    @PostMapping("/attendance")
+    public Attendance saveAttendance(@RequestBody Attendance attendance) {
         return attendanceService.saveAttendance(attendance);
+    }
+
+    @PreAuthorize("hasRole('MEMBER')")
+    @GetMapping("/attendance/my")
+    public List<Attendance> getMyAttendance(Authentication authentication) {
+
+        String email = authentication.getName();
+
+        return attendanceService.getAttendanceByEmail(email);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','TRAINER')")
     @PutMapping("/attendance/{id}")
-    public Attendance updateAttendance(@PathVariable Long id,
-                                       @RequestBody Attendance attendance){
-        return attendanceService.updateAttendance(id,attendance);
+    public Attendance updateAttendance(
+            @PathVariable Long id,
+            @RequestBody Attendance attendance) {
 
+        return attendanceService.updateAttendance(id, attendance);
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/attendance/{id}")
-    public void deleteAttendance(@PathVariable Long id){
+    public void deleteAttendance(@PathVariable Long id) {
         attendanceService.deleteAttendance(id);
     }
 }

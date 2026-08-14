@@ -1,5 +1,7 @@
 .main-content {
-    margin-top: 56px;      /* Same height as the navbar */
-    margin-left: 240px;    /* Same width as the sidebar */
+    margin-top: 56px;
+    margin-left: 240px;
     padding: 30px;
+    min-height: calc(100vh - 56px);
+    box-sizing: border-box;
 }

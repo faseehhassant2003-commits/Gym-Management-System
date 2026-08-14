@@ -16,7 +16,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByUserEmail(String email);
 
     Optional<Member> findByQrToken(String qrToken);
-
+    Optional<Member> findByUserId(Long userId);
     @Query("""
         SELECT new com.gymmanagement.dto.MemberStats(
             m.membership,

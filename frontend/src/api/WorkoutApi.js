@@ -1,7 +1,12 @@
 import api from "./api";
 
- export function generateWorkout(workoutRequest){
+export function generateWorkout(workoutRequest) {
     return api.post(
         "/workout/generate",
-        workoutRequest  );
-    }
+        workoutRequest
+    );
+}
+
+export function getMyWorkout() {
+    return api.get("/workout/my");
+}
