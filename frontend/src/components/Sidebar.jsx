@@ -107,12 +107,7 @@ function Sidebar() {
         {/* MEMBER ONLY */}
         {role === "MEMBER" && (
           <>
-            <li className="nav-item mb-2">
-              <Link to="/workoutplans" className="nav-link text-white">
-                <i className="bi bi-activity me-2"></i>
-                My Workout
-              </Link>
-            </li>
+        
             <li className="nav-item mb-2">
   <Link to="/home" className="nav-link text-white">
     <i className="bi bi-house-fill me-2"></i>
@@ -128,12 +123,6 @@ function Sidebar() {
   </Link>
 </li>
 
-            <li className="nav-item mb-2">
-              <Link to="/diet" className="nav-link text-white">
-                <i className="bi bi-heart-pulse me-2"></i>
-                My Diet
-              </Link>
-            </li>
 
             <li className="nav-item mb-2">
               <Link to="/my-attendance" className="nav-link text-white">
@@ -146,6 +135,19 @@ function Sidebar() {
               <Link to="/my-payments" className="nav-link text-white">
                 <i className="bi bi-cash-stack me-2"></i>
                 My Payments
+              </Link>
+            </li>
+                <li className="nav-item mb-2">
+              <Link to="/workoutplans" className="nav-link text-white">
+                <i className="bi bi-activity me-2"></i>
+                My Workout
+              </Link>
+            </li>
+            
+            <li className="nav-item mb-2">
+              <Link to="/diet" className="nav-link text-white">
+                <i className="bi bi-heart-pulse me-2"></i>
+                My Diet
               </Link>
             </li>
           </>
