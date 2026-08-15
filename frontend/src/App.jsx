@@ -40,15 +40,18 @@ function App() {
 
 
                 {/* ================= ADMIN / TRAINER DASHBOARD ================= */}
-
-                <Route
-                    path="/dashboard"
-                    element={
-                        <ProtectedRoute>
-                            <Dashboard />
-                        </ProtectedRoute>
-                    }
-                />
+<Route
+    path="/dashboard"
+    element={
+        <ProtectedRoute>
+            <RoleProtectedRoute allowedRoles={["ADMIN", "TRAINER"]}>
+                <Layout>
+                    <Dashboard />
+                </Layout>
+            </RoleProtectedRoute>
+        </ProtectedRoute>
+    }
+/>
 
 
                 {/* ================= MEMBER HOME ================= */}

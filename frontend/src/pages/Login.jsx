@@ -35,7 +35,16 @@ function Login() {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("role", response.data.role);
         localStorage.setItem("email", email);
-        navigate("/dashboard");
+       if (response.data.role === "MEMBER") {
+  navigate("/home");
+} else if (
+  response.data.role === "ADMIN" ||
+  response.data.role === "TRAINER"
+) {
+  navigate("/dashboard");
+} else {
+  navigate("/");
+}
       } else {
         setError(response.data.message);
         localStorage.removeItem("token");
