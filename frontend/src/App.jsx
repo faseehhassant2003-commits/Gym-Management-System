@@ -126,27 +126,20 @@ function App() {
                     }
                 />
 
+{/* ================= MEMBER AI WORKOUT ================= */}
 
-                {/* ================= WORKOUT ================= */}
-
-                <Route
-                    path="/workoutplans"
-                    element={
-                        <ProtectedRoute>
-                            <RoleProtectedRoute
-                                allowedRoles={[
-                                    "ADMIN",
-                                    "TRAINER",
-                                    "MEMBER"
-                                ]}
-                            >
-                                <WorkoutPlans />
-                            </RoleProtectedRoute>
-                        </ProtectedRoute>
-                    }
-                />
-
-
+<Route
+    path="/workoutplans"
+    element={
+        <ProtectedRoute>
+            <RoleProtectedRoute allowedRoles={["MEMBER"]}>
+                <Layout>
+                    <WorkoutPlans />
+                </Layout>
+            </RoleProtectedRoute>
+        </ProtectedRoute>
+    }
+/>
                 {/* ================= ADMIN / TRAINER ================= */}
 
                 <Route
@@ -177,22 +170,20 @@ function App() {
                 />
 
 
-                <Route
-                    path="/diet"
-                    element={
-                        <ProtectedRoute>
-                            <RoleProtectedRoute
-                                allowedRoles={[
-                                    "ADMIN",
-                                    "TRAINER",
-                                    "MEMBER"
-                                ]}
-                            >
-                                <DietPlans />
-                            </RoleProtectedRoute>
-                        </ProtectedRoute>
-                    }
-                />
+        {/* ================= MEMBER AI DIET ================= */}
+
+<Route
+    path="/diet"
+    element={
+        <ProtectedRoute>
+            <RoleProtectedRoute allowedRoles={["MEMBER"]}>
+                <Layout>
+                    <DietPlans />
+                </Layout>
+            </RoleProtectedRoute>
+        </ProtectedRoute>
+    }
+/>
 
 
                 <Route

@@ -3,15 +3,18 @@ import "./Sidebar.css";
 
 function Sidebar() {
 
-  
-  const role= localStorage.getItem("role");
+  const role = localStorage.getItem("role");
+
   return (
     <div className="sidebar">
-      <h4 className="text-center mb-4">Gym Management</h4>
+
+      <h4 className="text-center mb-4">
+        Gym Management
+      </h4>
 
       <ul className="nav flex-column">
 
-        {/* Profile (Member) */}
+        {/* ================= MEMBER PROFILE ================= */}
         {role === "MEMBER" && (
           <li className="nav-item mb-2">
             <Link to="/profile" className="nav-link text-white">
@@ -21,19 +24,17 @@ function Sidebar() {
           </li>
         )}
 
-    {/* Dashboard - ADMIN & TRAINER */}
-{(role === "ADMIN" || role === "TRAINER") && (
-  <li className="nav-item mb-2">
-    <Link to="/dashboard" className="nav-link text-white">
-      <i className="bi bi-speedometer2 me-2"></i>
-      Dashboard
-    </Link>
-  </li>
-)}
+        {/* ================= DASHBOARD - ADMIN & TRAINER ================= */}
+        {(role === "ADMIN" || role === "TRAINER") && (
+          <li className="nav-item mb-2">
+            <Link to="/dashboard" className="nav-link text-white">
+              <i className="bi bi-speedometer2 me-2"></i>
+              Dashboard
+            </Link>
+          </li>
+        )}
 
-
- 
-        {/* ADMIN & TRAINER */}
+        {/* ================= ADMIN & TRAINER ================= */}
         {(role === "ADMIN" || role === "TRAINER") && (
           <>
             <li className="nav-item mb-2">
@@ -49,24 +50,10 @@ function Sidebar() {
                 Attendance
               </Link>
             </li>
-
-            <li className="nav-item mb-2">
-              <Link to="/WorkoutPlans" className="nav-link text-white">
-                <i className="bi bi-robot me-2"></i>
-                AI Workout
-              </Link>
-            </li>
-
-            <li className="nav-item mb-2">
-              <Link to="/diet" className="nav-link text-white">
-                <i className="bi bi-robot me-2"></i>
-                AI Diet
-              </Link>
-            </li>
           </>
         )}
 
-        {/* ADMIN ONLY */}
+        {/* ================= ADMIN ONLY ================= */}
         {role === "ADMIN" && (
           <>
             <li className="nav-item mb-2">
@@ -76,15 +63,15 @@ function Sidebar() {
               </Link>
             </li>
 
-         
-            
-  <li className="nav-item mb-2">
-  <Link to="/subscription-plans" className="nav-link text-white">
-  <i className="bi bi-credit-card me-2"></i>
-    Subscription Plans
-  </Link>
-</li>
-
+            <li className="nav-item mb-2">
+              <Link
+                to="/subscription-plans"
+                className="nav-link text-white"
+              >
+                <i className="bi bi-credit-card me-2"></i>
+                Subscription Plans
+              </Link>
+            </li>
 
             <li className="nav-item mb-2">
               <Link to="/users" className="nav-link text-white">
@@ -95,6 +82,7 @@ function Sidebar() {
           </>
         )}
 
+        {/* ================= ADMIN & TRAINER QR SCANNER ================= */}
         {(role === "ADMIN" || role === "TRAINER") && (
           <li className="nav-item mb-2">
             <Link to="/qr-scanner" className="nav-link text-white">
@@ -104,25 +92,22 @@ function Sidebar() {
           </li>
         )}
 
-        {/* MEMBER ONLY */}
+        {/* ================= MEMBER ONLY ================= */}
         {role === "MEMBER" && (
           <>
-        
             <li className="nav-item mb-2">
-  <Link to="/home" className="nav-link text-white">
-    <i className="bi bi-house-fill me-2"></i>
-    Home
-  </Link>
-</li>
+              <Link to="/home" className="nav-link text-white">
+                <i className="bi bi-house-fill me-2"></i>
+                Home
+              </Link>
+            </li>
 
-            
-     <li className="nav-item mb-2">
-  <Link to="/subscription" className="nav-link text-white">
-    <i className="bi bi-credit-card me-2"></i>
-    Subscription
-  </Link>
-</li>
-
+            <li className="nav-item mb-2">
+              <Link to="/subscription" className="nav-link text-white">
+                <i className="bi bi-credit-card me-2"></i>
+                Subscription
+              </Link>
+            </li>
 
             <li className="nav-item mb-2">
               <Link to="/my-attendance" className="nav-link text-white">
@@ -137,17 +122,20 @@ function Sidebar() {
                 My Payments
               </Link>
             </li>
-                <li className="nav-item mb-2">
+
+            {/* AI WORKOUT - MEMBER ONLY */}
+            <li className="nav-item mb-2">
               <Link to="/workoutplans" className="nav-link text-white">
                 <i className="bi bi-activity me-2"></i>
-                My Workout
+                AI Workout
               </Link>
             </li>
-            
+
+            {/* AI DIET - MEMBER ONLY */}
             <li className="nav-item mb-2">
               <Link to="/diet" className="nav-link text-white">
                 <i className="bi bi-heart-pulse me-2"></i>
-                My Diet
+                AI Diet
               </Link>
             </li>
           </>
