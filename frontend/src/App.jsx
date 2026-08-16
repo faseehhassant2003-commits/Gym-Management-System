@@ -10,6 +10,7 @@ import SubscriptionPlans from "./pages/SubscriptionPlans";
 import DietPlans from "./pages/DietPlans";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import AIFitnessAssistant from "./pages/AIFitnessAssistant";
 import Profile from "./pages/Profile";
 import QRScanner from "./pages/QRScanner";
 import Subscription from "./pages/Subscription";
@@ -233,7 +234,18 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
-
+  <Route
+    path="/ai-chat"
+    element={
+        <ProtectedRoute>
+            <RoleProtectedRoute allowedRoles={["MEMBER"]}>
+                <Layout>
+                    <AIFitnessAssistant />
+                </Layout>
+            </RoleProtectedRoute>
+        </ProtectedRoute>
+    }
+/>
 
                 <Route
                     path="/users"
@@ -260,6 +272,8 @@ function App() {
                         </div>
                     }
                 />
+
+              
 
             </Routes>
         </BrowserRouter>
